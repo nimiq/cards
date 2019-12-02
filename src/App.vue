@@ -81,6 +81,9 @@
 </template>
 
 <script lang="ts">
+import '@nimiq/style/nimiq-style.min.css';
+import '@nimiq/vue-components/dist/NimiqVueComponents.css';
+
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component
