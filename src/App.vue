@@ -18,7 +18,7 @@
                         <Amount ref="amount" id="value" :amount="value" :decimals="2" v-bind:class="{ funded }"/>
                     </div>
 
-                    <textarea name="text" id="text" cols="30" rows="10"
+                    <textarea name="text" ref="text" cols="30" rows="10"
                         placeholder="Write your loving Christmas message here..."></textarea>
 
                     <div id="qrcode">
@@ -50,7 +50,7 @@ import '@nimiq/vue-components/dist/NimiqVueComponents.css';
 
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Amount, QrCode } from '@nimiq/vue-components';
-import HubApi from '@nimiq/hub-api';
+import { HubApi, Cashlink } from '@nimiq/hub-api';
 
 @Component({ components: { Amount, QrCode } })
 export default class App extends Vue {
@@ -73,18 +73,25 @@ export default class App extends Vue {
     }
 
     async fund() {
-        const live = false;
-        const hubApi = new HubApi(`https://hub.nimiq${live ? '' : '-testnet'}.com`);
+        // const live = false;
+        // const hubApi = new HubApi(`https://hub.nimiq${live ? '' : '-testnet'}.com`);
+        // FIXME
+        const hubApi = new HubApi('https://localhost:8080');
         console.log(hubApi);
-        // const cashlink = await hubApi.createCashlink({});
-        // console.log(cashlink);
-        // this.cashlink = cashlink;
-        this.cashlink = this.cashlinkDummy;
-        this.value = 100 * 1e5;
+
+        this.cashlink = await hubApi.createCashlink({
+            label: (this.$refs.text as HTMLTextAreaElement).value,
+            shorten: true,
+        });
+
+        // this.cashlink = this.cashlinkDummy;
+
+        const cashlink = await Cashlink.parse(this.cashlink);
+        this.value = cashlink.value;
         this.$nextTick(async () => {
-            console.log(await (this.$refs.qrcode as QrCode).toDataUrl());
             (this.$refs.qrcodeimg as HTMLImageElement).src = await (this.$refs.qrcode as QrCode).toDataUrl();
         });
+
         this.funded = true;
     }
 
@@ -100,6 +107,7 @@ export default class App extends Vue {
         background: var(--nimiq-gray) url("../assets/christmas-background.svg");
         background-position: center bottom;
         background-size: cover;
+        overflow: hidden;
     }
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -108,7 +116,6 @@ export default class App extends Vue {
         text-align: left;
         color: #2c3e50;
         margin-top: 60px;
-        overflow: hidden;
     }
 
     article {
@@ -219,7 +226,6 @@ export default class App extends Vue {
             right: 6.25rem;
             width: 18rem;
             height: 18rem;
-            // background: #4d4b6a;
 
             .placeholder {
                 color: white;
@@ -233,15 +239,9 @@ export default class App extends Vue {
             canvas, img {
                 width: 100%;
                 height: 100%;
-
             }
 
-            // @media screen {
-                // img { display: none; }
-            // }
-            // @media print {
-                canvas { display: none; }
-            // }
+            canvas { display: none; }
         }
     }
 
