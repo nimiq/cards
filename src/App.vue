@@ -65,10 +65,6 @@ export default class App extends Vue {
     })
     cashlink = '';
 
-    cashlinkDummy = 'https://hub.nimiq-testnet.com/cashlink/'
-        + '#HflvsbZvE_rmZS2Vhop5rJugkj6w8WYLvfS7uty4RkwAAAAABfXhAEAxMjM0NTY3ODkwOT'
-        + 'g3NjU0MzQ1Njc4OTg3NjU0MzI0NTY3ODk4NzY1NDM0NTY3ODk4NzY1NDMyMzQ1Njc4OTg3';
-
     create() {
         this.intro = false;
     }
@@ -84,9 +80,6 @@ export default class App extends Vue {
             returnCashlink: true,
             skipSharing: true,
         });
-
-        // this.cashlink = this.cashlinkDummy;
-        // this.value = 100;
 
         this.value = cashlink.value;
         this.cashlink = cashlink.cashlink!;
