@@ -11,6 +11,7 @@
                 </section>
             </article>
             <article v-else class="main" key="main">
+                <h2 class="title">Create your Holiday Gift Card</h2>
                 <section id="card" class="content">
                     <img src="../assets/christmas-card.svg" class="background">
 
@@ -18,7 +19,7 @@
                         <Amount ref="amount" id="value" :amount="value" :decimals="2" v-bind:class="{ funded }"/>
                     </div>
 
-                    <textarea name="text" ref="text" cols="30" rows="10"
+                    <textarea id="text" ref="text" cols="30" rows="10"
                         placeholder="Write your loving Christmas message here..."></textarea>
 
                     <div id="qrcode">
@@ -50,7 +51,7 @@ import '@nimiq/vue-components/dist/NimiqVueComponents.css';
 
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Amount, QrCode } from '@nimiq/vue-components';
-import { HubApi, Cashlink } from '@nimiq/hub-api';
+import HubApi, { Cashlink } from '@nimiq/hub-api';
 
 @Component({ components: { Amount, QrCode } })
 export default class App extends Vue {
@@ -73,21 +74,22 @@ export default class App extends Vue {
     }
 
     async fund() {
-        // const live = false;
-        // const hubApi = new HubApi(`https://hub.nimiq${live ? '' : '-testnet'}.com`);
-        // FIXME
-        const hubApi = new HubApi('https://localhost:8080');
-        console.log(hubApi);
+        const live = false;
+        const hubApi = new HubApi(`https://hub.nimiq${live ? '' : '-testnet'}.com`);
 
-        this.cashlink = await hubApi.createCashlink({
-            label: (this.$refs.text as HTMLTextAreaElement).value,
-            shorten: true,
+        const cashlink: Cashlink = await hubApi.createCashlink({
+            appName: 'Christmas Gift Card',
+            message: (this.$refs.text as HTMLTextAreaElement).value,
+            autoTruncateMessage: true,
+            returnCashlink: true,
+            skipSharing: true,
         });
 
         // this.cashlink = this.cashlinkDummy;
+        // this.value = 100;
 
-        const cashlink = await Cashlink.parse(this.cashlink);
         this.value = cashlink.value;
+        this.cashlink = cashlink.cashlink!;
         this.$nextTick(async () => {
             (this.$refs.qrcodeimg as HTMLImageElement).src = await (this.$refs.qrcode as QrCode).toDataUrl();
         });
@@ -103,6 +105,10 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
+
+    $contentWidth: 86rem;
+    $contentHeight: 43.375rem;
+
     body {
         background: var(--nimiq-gray) url("../assets/christmas-background.svg");
         background-position: center bottom;
@@ -110,7 +116,6 @@ export default class App extends Vue {
         overflow: hidden;
     }
     #app {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-align: left;
@@ -147,14 +152,23 @@ export default class App extends Vue {
         opacity: 1;
     }
 
+    .title {
+        font-size: 3rem;
+        text-align: center;
+        width: $contentWidth;
+        position: absolute;
+        top: calc(50% - #{$contentHeight} / 2 - 10.25rem);
+        left: calc(50% - #{$contentWidth} / 2);
+    }
+
     .content {
-        width: 86rem;
-        height: 43.375rem;
+        width: $contentWidth;
+        height: $contentHeight;
         position: absolute;
 
         @media screen {
-            top: calc(50% - 21.65rem);
-            left: calc(50% - 43rem);
+            top: calc(50% - #{$contentHeight} / 2);
+            left: calc(50% - #{$contentWidth} / 2);
         }
     }
 
@@ -165,7 +179,7 @@ export default class App extends Vue {
     }
 
     #card {
-        background: url("../assets/christmas-card_dummy.svg");
+        background: url("../assets/christmas-card.svg");
         background-size: cover;
         border-radius: 1rem;
         overflow: hidden;
@@ -183,10 +197,10 @@ export default class App extends Vue {
             position: absolute;
             top: 5rem;
             left: 2rem;
-            width: 45.875rem;
+            width: 44.875rem;
             height: 8.5rem;
-            padding: 1rem 0 0 3rem;
-            border-bottom: 1px solid rgba(255,255,255,.5);
+            padding: 1rem 0 0 2rem;
+            // border-bottom: 1.5px solid rgba(255,255,255,.5);
 
             #value {
                 font-size: 5rem;
