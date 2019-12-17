@@ -24,7 +24,7 @@
                         placeholder="Write your loving Holiday message here..."></textarea>
 
                     <div id="qrcode">
-                        <QrCode v-show="funded" fill="#ffffff" :data="cashlink"
+                        <QrCode v-show="funded" fill="#1f2248" :data="cashlink"
                         errorCorrection="L" :radius="0.5" :size="300" ref="qrcode" />
                         <img v-show="funded" :src="qrCodeSource" alt="QR Code" ref="qrcodeimg">
                         <div class="placeholder" v-if="!funded">
@@ -117,15 +117,16 @@ export default class App extends Vue {
 
     $contentWidth: 86rem;
     $contentHeight: 43.375rem;
-    $mobileBreakPoint: 1024px;
 
-    @media screen and (orientation: landscape) and (max-width: $mobileBreakPoint) {
+    @media only screen and (orientation: landscape) and (max-width: 1023px) {
+    // @media only screen and (max-width: 1024px) and (orientation: landscape) {
         html {
             font-size: 5px;
         }
     }
 
-    @media screen and (orientation: portrait) {
+    @media only screen and (orientation: portrait) and (max-width: 1023px) {
+    // @media only screen and (max-width: 800px) {
         body:before {
             content: "Hey there! With this app, you can create and print holiday gift cards. "
             + "But it's designed for desktop computers and laptops. "
@@ -279,13 +280,14 @@ export default class App extends Vue {
 
         #qrcode {
             position: absolute;
-            top: 7.75rem;
-            right: 6.75rem;
-            width: 17rem;
-            height: 17rem;
+            top: 6.75rem;
+            right: 5.75rem;
+            width: 19rem;
+            height: 19rem;
+            padding: 1rem;
 
             .placeholder {
-                color: white;
+                // color: black;
                 font-size: 1.25rem;
                 text-align: center;
                 position: relative;
