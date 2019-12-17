@@ -117,6 +117,33 @@ export default class App extends Vue {
 
     $contentWidth: 86rem;
     $contentHeight: 43.375rem;
+    $mobileBreakPoint: 1024px;
+
+    @media screen and (orientation: landscape) and (max-width: $mobileBreakPoint) {
+        html {
+            font-size: 5px;
+        }
+    }
+
+    @media screen and (orientation: portrait) {
+        body:before {
+            content: "Hey there! With this app, you can create and print holiday gift cards. "
+            + "But it's designed for desktop computers and laptops. "
+            + "So fetch your laptop, go to nimiq.com/holidays and create a gift for your friends and family.";
+            position: fixed;
+            top: 12rem;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: var(--nimiq-gray);
+            z-index: 999;
+            padding: 0 3rem;
+        }
+
+        header.logo {
+            padding-top: 5rem;
+        }
+    }
 
     body {
         background: var(--nimiq-gray) url("../assets/christmas-background.svg");
@@ -252,10 +279,10 @@ export default class App extends Vue {
 
         #qrcode {
             position: absolute;
-            top: 7.25rem;
-            right: 6.25rem;
-            width: 18rem;
-            height: 18rem;
+            top: 7.75rem;
+            right: 6.75rem;
+            width: 17rem;
+            height: 17rem;
 
             .placeholder {
                 color: white;
