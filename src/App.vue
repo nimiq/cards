@@ -25,7 +25,7 @@
                     <div id="qrcode">
                         <QrCode v-show="funded" fill="#ffffff" :data="cashlink"
                         errorCorrection="L" :radius="0.5" :size="300" ref="qrcode" />
-                        <img v-show="funded" src="qrCodeSource" alt="QR Code" ref="qrcodeimg">
+                        <img v-show="funded" :src="qrCodeSource" alt="QR Code" ref="qrcodeimg">
                         <div class="placeholder" v-if="!funded">
                             QR code will be shown here once you funded your gift card.
                         </div>
@@ -60,6 +60,7 @@ export default class App extends Vue {
     printed = false;
     value = 0;
     cashlink = '';
+    qrCodeSource = '';
 
     create() {
         this.intro = false;
@@ -82,9 +83,8 @@ export default class App extends Vue {
             this.value = cashlink.value;
             this.cashlink = cashlink.cashlink!;
 
-            this.$nextTick(async () => {
-                (this.$refs.qrcodeimg as HTMLImageElement).src = await (this.$refs.qrcode as QrCode).toDataUrl();
-            });
+            await this.$nextTick();
+            this.qrCodeSource = await (this.$refs.qrcode as QrCode).toDataUrl();
 
             this.funded = true;
         } catch (e) {

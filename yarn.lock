@@ -920,7 +920,7 @@
   resolved "https://registry.yarnpkg.com/@nimiq/core-web/-/core-web-1.5.3.tgz#f0a4de59394f210f2c2d9cda8ee35c716847d40e"
   integrity sha512-W66SS9n3ygYgD52r1GJr1WtYYOkcZsqdtMmDCEwDvkrmeARnHs2sAvj77Wt4PQG8JA7GwK5svIJr6rGccCaekw==
 
-"@nimiq/hub-api@^1.2.0-beta.5":
+"@nimiq/hub-api@^1.2.0-beta.6":
   version "1.2.0-beta.6"
   resolved "https://registry.yarnpkg.com/@nimiq/hub-api/-/hub-api-1.2.0-beta.6.tgz#74375aad9a10bfdd078867acb1cb9a839d0f2fdf"
   integrity sha512-LJHDap0IWKrben6xo1lt5eatytnKovaf8w8c7UNKFvBRGW5Qc9aTjcwuwuTyDTZPmZ0CS/43oe+cRQDDaLpT7A==
