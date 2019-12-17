@@ -1,5 +1,6 @@
 <template>
     <main id="app">
+        <link rel="prefetch" :href="CARD_BACKGROUND_DEPLOYMENT_URL">
         <transition name="switch">
             <article v-if="intro" class="intro" key="intro">
                 <section class="content">
@@ -53,8 +54,14 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Amount, QrCode } from '@nimiq/vue-components';
 import HubApi, { Cashlink } from '@nimiq/hub-api';
 
+// Load the deployment destination url via file loader.
+// @ts-ignore: Ignore typescript complaining about unknown types for imported svg.
+import CARD_BACKGROUND_DEPLOYMENT_URL from '../assets/christmas-card.svg';
+
 @Component({ components: { Amount, QrCode } })
 export default class App extends Vue {
+    CARD_BACKGROUND_DEPLOYMENT_URL = CARD_BACKGROUND_DEPLOYMENT_URL;
+
     intro = true;
     funded = false;
     printed = false;
@@ -181,7 +188,6 @@ export default class App extends Vue {
     }
 
     #card {
-        background: url("../assets/christmas-card.svg");
         background-size: cover;
         border-radius: 1rem;
         overflow: hidden;
