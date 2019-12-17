@@ -3,7 +3,7 @@
         <transition name="switch">
             <article v-if="intro" class="intro" key="intro">
                 <section class="content">
-                    <h1>Nimiq Christmas Gift Cards</h1>
+                    <h1>Nimiq Holiday Gift Cards</h1>
                     <p>
                         Treat your friends and family to the wonderful gift of NIM this holiday.
                     </p>
@@ -11,7 +11,7 @@
                 </section>
             </article>
             <article v-else class="main" key="main">
-                <h2 class="title">Create your Christmas Gift Card</h2>
+                <h2 class="title">Create your Holiday Gift Card</h2>
                 <section id="card" class="content">
                     <img src="../assets/christmas-card.svg" class="background">
 
@@ -20,7 +20,7 @@
                     </div>
 
                     <textarea id="text" ref="text"
-                        placeholder="Write your loving Christmas message here..."></textarea>
+                        placeholder="Write your loving Holiday message here..."></textarea>
 
                     <div id="qrcode">
                         <QrCode v-show="funded" fill="#ffffff" :data="cashlink"
@@ -74,7 +74,7 @@ export default class App extends Vue {
 
         try {
             const cashlink: Cashlink = await hubApi.createCashlink({
-                appName: 'Christmas Gift Card',
+                appName: 'Holiday Gift Card',
                 message: (this.$refs.text as HTMLTextAreaElement).value,
                 autoTruncateMessage: true,
                 returnCashlink: true,
