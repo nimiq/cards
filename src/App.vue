@@ -92,6 +92,7 @@ export default class App extends Vue {
         } catch (e) {
             const message = e.message || e;
             if (message !== 'CANCELED' && message !== 'Connection was closed') {
+                await new Promise(resolve => setTimeout(resolve, 500)); // give the hub popup time to close
                 // eslint-disable-next-line
                 alert(e);
             }
