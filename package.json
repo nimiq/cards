@@ -4,11 +4,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "docs": "rm -rf docs && vue-cli-service build && cp dist docs",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "@nimiq/hub-api": "link:../hub/client",
+    "@nimiq/hub-api": "^1.2.0-beta.6",
     "@nimiq/style": "^0.7.6",
     "@nimiq/vue-components": "https://github.com/nimiq/vue-components.git#daniel/build/hub/cashlinks+checkout",
     "core-js": "^3.4.3",

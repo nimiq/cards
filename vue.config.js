@@ -8,4 +8,7 @@ const configureWebpack = {
     ],
 };
 
-module.exports = { configureWebpack };
+module.exports = {
+    publicPath: '',
+    configureWebpack,
+};
