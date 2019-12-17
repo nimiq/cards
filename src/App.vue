@@ -3,7 +3,7 @@
         <transition name="switch">
             <article v-if="intro" class="intro" key="intro">
                 <section class="content">
-                    <h1>Nimiq Holiday Gift Cards</h1>
+                    <h1>Nimiq Christmas Gift Cards</h1>
                     <p>
                         Treat your friends and family to the wonderful gift of NIM this holiday.
                     </p>
@@ -11,7 +11,7 @@
                 </section>
             </article>
             <article v-else class="main" key="main">
-                <h2 class="title">Create your Holiday Gift Card</h2>
+                <h2 class="title">Create your Christmas Gift Card</h2>
                 <section id="card" class="content">
                     <img src="../assets/christmas-card.svg" class="background">
 
@@ -49,11 +49,9 @@
 import '@nimiq/style/nimiq-style.min.css';
 import '@nimiq/vue-components/dist/NimiqVueComponents.css';
 
-// import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Component, Vue } from 'vue-property-decorator';
 import { Amount, QrCode } from '@nimiq/vue-components';
 import HubApi, { Cashlink } from '@nimiq/hub-api';
-// import HubApi, { Cashlink } from '@nimiq/hub-api';
 
 @Component({ components: { Amount, QrCode } })
 export default class App extends Vue {
@@ -61,10 +59,6 @@ export default class App extends Vue {
     funded = false;
     printed = false;
     value = 0;
-    // @Prop({
-    //     type: String,
-    //     default: '',
-    // })
     cashlink = '';
 
     create() {
@@ -87,11 +81,6 @@ export default class App extends Vue {
 
             this.value = cashlink.value;
             this.cashlink = cashlink.cashlink!;
-
-            // this.cashlink = 'https://hub.nimiq-testnet.com/cashlink/'
-            // + '#HflvsbZvE_rmZS2Vhop5rJugkj6w8WYLvfS7uty4RkwAAAAABfXhAEAxMjM0NTY3ODkwOT'
-            // + 'g3NjU0MzQ1Njc4OTg3NjU0MzI0NTY3ODk4NzY1NDM0NTY3ODk4NzY1NDMyMzQ1Njc4OTg3';
-            // this.value = 100 * 1e5;
 
             this.$nextTick(async () => {
                 (this.$refs.qrcodeimg as HTMLImageElement).src = await (this.$refs.qrcode as QrCode).toDataUrl();
