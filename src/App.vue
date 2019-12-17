@@ -19,7 +19,7 @@
                         <Amount ref="amount" id="value" :amount="value" :decimals="2" v-bind:class="{ funded }"/>
                     </div>
 
-                    <textarea id="text" ref="text" cols="30" rows="10"
+                    <textarea id="text" ref="text"
                         placeholder="Write your loving Christmas message here..."></textarea>
 
                     <div id="qrcode">
@@ -49,9 +49,11 @@
 import '@nimiq/style/nimiq-style.min.css';
 import '@nimiq/vue-components/dist/NimiqVueComponents.css';
 
-import { Component, Vue, Prop } from 'vue-property-decorator';
+// import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { Amount, QrCode } from '@nimiq/vue-components';
 import HubApi, { Cashlink } from '@nimiq/hub-api';
+// import HubApi, { Cashlink } from '@nimiq/hub-api';
 
 @Component({ components: { Amount, QrCode } })
 export default class App extends Vue {
@@ -59,10 +61,10 @@ export default class App extends Vue {
     funded = false;
     printed = false;
     value = 0;
-    @Prop({
-        type: String,
-        default: '',
-    })
+    // @Prop({
+    //     type: String,
+    //     default: '',
+    // })
     cashlink = '';
 
     create() {
@@ -73,21 +75,35 @@ export default class App extends Vue {
         const live = false;
         const hubApi = new HubApi(`https://hub.nimiq${live ? '' : '-testnet'}.com`);
 
-        const cashlink: Cashlink = await hubApi.createCashlink({
-            appName: 'Christmas Gift Card',
-            message: (this.$refs.text as HTMLTextAreaElement).value,
-            autoTruncateMessage: true,
-            returnCashlink: true,
-            skipSharing: true,
-        });
+        try {
+            const cashlink: Cashlink = await hubApi.createCashlink({
+                appName: 'Christmas Gift Card',
+                message: (this.$refs.text as HTMLTextAreaElement).value,
+                autoTruncateMessage: true,
+                returnCashlink: true,
+                skipSharing: true,
+                theme: HubApi.CashlinkTheme.CHRISTMAS,
+            });
 
-        this.value = cashlink.value;
-        this.cashlink = cashlink.cashlink!;
-        this.$nextTick(async () => {
-            (this.$refs.qrcodeimg as HTMLImageElement).src = await (this.$refs.qrcode as QrCode).toDataUrl();
-        });
+            this.value = cashlink.value;
+            this.cashlink = cashlink.cashlink!;
 
-        this.funded = true;
+            // this.cashlink = 'https://hub.nimiq-testnet.com/cashlink/'
+            // + '#HflvsbZvE_rmZS2Vhop5rJugkj6w8WYLvfS7uty4RkwAAAAABfXhAEAxMjM0NTY3ODkwOT'
+            // + 'g3NjU0MzQ1Njc4OTg3NjU0MzI0NTY3ODk4NzY1NDM0NTY3ODk4NzY1NDMyMzQ1Njc4OTg3';
+            // this.value = 100 * 1e5;
+
+            this.$nextTick(async () => {
+                (this.$refs.qrcodeimg as HTMLImageElement).src = await (this.$refs.qrcode as QrCode).toDataUrl();
+            });
+
+            this.funded = true;
+        } catch (e) {
+            if (e.name === 'Error') {
+                alert(e);
+            }
+            // user canceled
+        }
     }
 
     print() {
@@ -125,10 +141,10 @@ export default class App extends Vue {
     }
 
     .switch-enter-active {
-        transition: all .8s cubic-bezier(.31,.64,.84,1.3);
+        transition: all .5s cubic-bezier(.31,.64,.84,1.3);
     }
     .switch-leave-active {
-        transition: all .6s ease-out;
+        transition: all .3s ease-out;
     }
     .intro.switch-leave {
         opacity: 1;
@@ -137,11 +153,11 @@ export default class App extends Vue {
         opacity: 0;
     }
     .main.switch-enter {
-        transform: translateY(80vh);
+        transform: translate3d(0, 80vh, 0);
         opacity: .5;
     }
     .main.switch-enter-to {
-        transform: translateY(0);
+        transform: translate3d(0, 0, 0);
         opacity: 1;
     }
 
@@ -202,7 +218,7 @@ export default class App extends Vue {
                 border: none;
                 margin-top: 1rem;
                 padding: 1rem;
-                color: white;
+                color: rgba(255, 255, 255, 0.54);
 
                 &.funded {
                     color: var(--nimiq-gold);
@@ -216,15 +232,23 @@ export default class App extends Vue {
 
         #text {
             position: absolute;
-            width: 45.875rem;
+            width: 43rem;
             top: 16.5rem;
-            bottom: 5rem;
+            bottom: 7rem;
             left: 2rem;
             padding-left: 3rem;
             background: none;
             border: none;
             font-size: 2.25rem;
             color: white;
+            font-family: Muli,system-ui,sans-serif;
+            &::placeholder {
+                color:rgba(255, 255, 255, 0.54);
+                // color: red;
+            }
+            &:focus {
+                outline: none;
+            }
         }
 
         #qrcode {
