@@ -67,8 +67,10 @@ export default class App extends Vue {
     }
 
     async fund() {
-        const live = false;
-        const hubApi = new HubApi(`https://hub.nimiq${live ? '' : '-testnet'}.com`);
+        const hubOrigin = window.location.origin.includes('www')
+            ? window.location.origin.replace('www', 'hub')
+            : `${window.location.protocol}//${window.location.hostname}:8080`;
+        const hubApi = new HubApi(hubOrigin);
 
         try {
             const cashlink: Cashlink = await hubApi.createCashlink({
@@ -88,10 +90,11 @@ export default class App extends Vue {
 
             this.funded = true;
         } catch (e) {
-            if (e.name === 'Error') {
+            const message = e.message || e;
+            if (message !== 'CANCELED' && message !== 'Connection was closed') {
+                // eslint-disable-next-line
                 alert(e);
             }
-            // user canceled
         }
     }
 
