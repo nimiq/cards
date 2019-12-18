@@ -1,6 +1,12 @@
 <template>
     <main id="app">
         <link rel="prefetch" href="img/christmas-card.svg"><!-- this is the path in the deployment -->
+        <transition name="notification">
+            <div v-if="showNotification" class="notification">
+                <img src="../assets/checkmark-small.svg">
+                Gift Card created.
+            </div>
+        </transition>
         <transition name="switch">
             <article v-if="intro" class="intro" key="intro">
                 <section class="content">
@@ -62,6 +68,7 @@ export default class App extends Vue {
     value = 0;
     cashlink = '';
     qrCodeSource = '';
+    showNotification = false;
 
     create() {
         this.intro = false;
@@ -90,6 +97,11 @@ export default class App extends Vue {
             this.qrCodeSource = await (this.$refs.qrcode as QrCode).toDataUrl();
 
             this.funded = true;
+
+            this.showNotification = true;
+            setTimeout(() => {
+                this.showNotification = false;
+            }, 3000);
         } catch (e) {
             const message = e.message || e;
             if (message !== 'CANCELED' && message !== 'Connection was closed') {
@@ -125,6 +137,32 @@ export default class App extends Vue {
         text-align: left;
         color: #2c3e50;
         margin-top: 60px;
+    }
+
+    .notification {
+        position: fixed;
+        left: calc(50% - 13.25rem);
+        top: 9rem;
+        padding: 3rem;
+        border-radius: 2rem;
+        box-shadow: 0 1rem 2.5rem rgba(0,0,0,.2);
+        background: white;
+        color: var(--nimiq-green);
+        font-weight: bold;
+        transition: transform .7s, opacity .7s;
+        transition-delay: 1s; // wait a bit for hub popup to close
+        z-index: 1;
+    }
+
+    .notification-enter,
+    .notification-leave-to {
+        opacity: 0;
+        transform: translateY(-13rem);
+    }
+
+    .notification img {
+        margin-right: 1rem;
+        width: 2rem;
     }
 
     article {
@@ -272,7 +310,7 @@ export default class App extends Vue {
     }
 
     @media print {
-        footer, header.logo, .cta {
+        footer, header.logo, .title, .notification, .cta {
             display: none;
         }
         body {
