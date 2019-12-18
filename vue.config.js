@@ -11,6 +11,7 @@ const chainWebpack = (config) => {
 };
 
 module.exports = {
+    outputDir: 'deployment/dist',
     publicPath: '',
     chainWebpack,
 };
