@@ -1,14 +1,16 @@
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-
-const configureWebpack = {
-    plugins: [
-        new CopyWebpackPlugin([
-            { from: 'node_modules/@nimiq/vue-components/dist/img/iqons.min*.svg', to: 'img/iqons.min.svg' },
-        ]),
-    ],
+const chainWebpack = (config) => {
+    // export our svg images to dist without renaming such that we can easier preload / prefetch them
+    config.module
+        .rule('svg')
+        .use('file-loader')
+        .loader('file-loader')
+        .tap(options => ({
+            ...options,
+            name: 'img/[name].[ext]',
+        }));
 };
 
 module.exports = {
     publicPath: '',
-    configureWebpack,
+    chainWebpack,
 };
