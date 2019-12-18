@@ -118,40 +118,13 @@ export default class App extends Vue {
     $contentWidth: 86rem;
     $contentHeight: 43.375rem;
 
-    @media only screen and (orientation: landscape) and (max-width: 1023px) {
-    // @media only screen and (max-width: 1024px) and (orientation: landscape) {
-        html {
-            font-size: 5px;
-        }
-    }
-
-    @media only screen and (orientation: portrait) and (max-width: 1023px) {
-    // @media only screen and (max-width: 800px) {
-        body:before {
-            content: "Hey there! With this app, you can create and print holiday gift cards. "
-            + "But it's designed for desktop computers and laptops. "
-            + "So fetch your laptop, go to nimiq.com/holidays and create a gift for your friends and family.";
-            position: fixed;
-            top: 12rem;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background: var(--nimiq-gray);
-            z-index: 999;
-            padding: 0 3rem;
-        }
-
-        header.logo {
-            padding-top: 5rem;
-        }
-    }
-
     body {
         background: var(--nimiq-gray) url("../assets/christmas-background.svg");
         background-position: center bottom;
         background-size: cover;
         overflow: hidden;
     }
+
     #app {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -287,11 +260,11 @@ export default class App extends Vue {
             padding: 1rem;
 
             .placeholder {
-                // color: black;
                 font-size: 1.25rem;
                 text-align: center;
-                position: relative;
-                top: calc(50% - 1.5 * 1.25rem);
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
                 padding: 0 2rem;
             }
 
@@ -310,6 +283,55 @@ export default class App extends Vue {
         }
         body {
             background: none;
+        }
+    }
+
+    @media only screen and (max-width: 1023px), only screen and (max-height: 599px) {
+        html {
+            font-size: 7px;
+        }
+
+        #card #qrcode .placeholder {
+            font-size: 1.4rem;
+        }
+    }
+
+    @media only screen and (max-width: 749px), only screen and (max-height: 499px) {
+        html {
+            font-size: 6px;
+        }
+
+        #card #qrcode .placeholder {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media only screen and (max-width: 599px), only screen and (max-height: 419px) {
+        html {
+            font-size: 7px;
+        }
+
+        header.logo {
+            padding-top: 5rem;
+        }
+
+        #app {
+            display: flex;
+            margin-top: 0;
+        }
+
+        #app > * {
+            display: none;
+        }
+
+        #app::before {
+            content: "Hey there! With this app, you can create and print holiday gift cards. "
+            + "But it's designed for desktop computers and laptops. "
+            + "So fetch your laptop, go to nimiq.com/holidays and create a gift for your friends and family.";
+            padding: 0 3rem;
+            margin: auto;
+            text-align: center;
+            line-height: 1.5;
         }
     }
 
