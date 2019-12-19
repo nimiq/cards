@@ -26,7 +26,7 @@
                         <Amount ref="amount" id="value" :amount="value" :decimals="2" v-bind:class="{ funded }"/>
                     </div>
 
-                    <textarea id="text" ref="text"
+                    <textarea id="text" v-model="message"
                         placeholder="Write your loving Holiday message here..."></textarea>
 
                     <div id="qrcode">
@@ -66,6 +66,7 @@ export default class App extends Vue {
     funded = false;
     printed = false;
     value = 0;
+    message = '';
     cashlink = '';
     qrCodeSource = '';
     showNotification = false;
@@ -83,7 +84,7 @@ export default class App extends Vue {
         try {
             const cashlink: Cashlink = await hubApi.createCashlink({
                 appName: 'Holiday Gift Card',
-                message: (this.$refs.text as HTMLTextAreaElement).value,
+                message: this.message,
                 autoTruncateMessage: true,
                 returnCashlink: true,
                 skipSharing: true,
@@ -92,6 +93,8 @@ export default class App extends Vue {
 
             this.value = cashlink.value;
             this.cashlink = cashlink.cashlink!;
+
+            if (!this.message && cashlink.message) this.message = cashlink.message as string;
 
             await this.$nextTick();
             this.qrCodeSource = await (this.$refs.qrcode as QrCode).toDataUrl();
