@@ -75,8 +75,8 @@ export default class App extends Vue {
     }
 
     async fund() {
-        const hubOrigin = window.location.origin.includes('www')
-            ? window.location.origin.replace('www', 'hub')
+        const hubOrigin = /(www\.)?nimiq/.test(window.location.origin)
+            ? window.location.origin.replace(/(www\.)?nimiq/, 'hub.nimiq')
             : `${window.location.protocol}//${window.location.hostname}:8080`;
         const hubApi = new HubApi(hubOrigin);
 
