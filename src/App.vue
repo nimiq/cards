@@ -176,11 +176,14 @@ export default class App extends Vue {
         left: 0;
     }
 
+    .main {
+        transform: translateY(0vh);
+    }
     .switch-enter-active {
-        transition: all .5s cubic-bezier(.31,.64,.84,1.3);
+        transition: all 1s ease-out;
     }
     .switch-leave-active {
-        transition: all .3s ease-out;
+        transition: all .7s ease-out;
     }
     .intro.switch-leave {
         opacity: 1;
@@ -189,11 +192,12 @@ export default class App extends Vue {
         opacity: 0;
     }
     .main.switch-enter {
-        transform: translate3d(0, 80vh, 0);
+        transform: perspective(100vw) translate3d(4vw, 80vh, 80vw) rotate3d(.5, .5, 1, 26deg);
         opacity: .5;
     }
     .main.switch-enter-to {
-        transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0) rotate3d(0,0,0,0);
+        rotate: 0;
         opacity: 1;
     }
 
