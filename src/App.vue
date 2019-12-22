@@ -127,6 +127,10 @@ export default class App extends Vue {
     $contentWidth: 86rem;
     $contentHeight: 43.375rem;
 
+    html {
+        contain: layout; // avoid expensive re-layouting during transition of transform on state switch
+    }
+
     body {
         background: var(--nimiq-gray) url("../assets/christmas-background.svg");
         background-position: center bottom;
@@ -140,6 +144,9 @@ export default class App extends Vue {
         text-align: left;
         color: #2c3e50;
         margin-top: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .notification {
@@ -168,37 +175,21 @@ export default class App extends Vue {
         width: 2rem;
     }
 
-    article {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-    }
-
     .main {
         transform: translateY(0vh);
     }
-    .switch-enter-active {
-        transition: all 1s ease-out;
-    }
     .switch-leave-active {
-        transition: all .7s ease-out;
+        transition: transform .7s ease-out, opacity .7s ease-out;
     }
-    .intro.switch-leave {
-        opacity: 1;
+    .switch-enter-active {
+        transition: transform 1s ease-out, opacity 1s ease-out;
     }
-    .intro.switch-leave-to {
+    .switch-leave-to {
         opacity: 0;
     }
-    .main.switch-enter {
+    .switch-enter {
         transform: perspective(100vw) translate3d(4vw, 80vh, 80vw) rotate3d(.5, .5, 1, 26deg);
         opacity: .5;
-    }
-    .main.switch-enter-to {
-        transform: translate3d(0, 0, 0) rotate3d(0,0,0,0);
-        rotate: 0;
-        opacity: 1;
     }
 
     .title {
@@ -323,6 +314,12 @@ export default class App extends Vue {
 
         body {
             background: none;
+        }
+
+        article {
+            position: absolute;
+            left: 0;
+            top: 0;
         }
 
         #text {
