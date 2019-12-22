@@ -9,7 +9,7 @@
         </transition>
         <transition name="switch">
             <article v-if="intro" class="intro" key="intro">
-                <section class="content">
+                <section>
                     <h1>Nimiq Holiday Gift Cards</h1>
                     <p>
                         Treat your friends and family to the wonderful gift of NIM this holiday.
@@ -19,7 +19,7 @@
             </article>
             <article v-else class="main" key="main">
                 <h2 class="title">Create your Holiday Gift Card</h2>
-                <section id="card" class="content">
+                <section id="card">
                     <img src="../assets/christmas-card.svg" class="background">
 
                     <div class="value-container">
@@ -123,10 +123,6 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-
-    $contentWidth: 86rem;
-    $contentHeight: 43.375rem;
-
     html {
         contain: layout; // avoid expensive re-layouting during transition of transform on state switch
     }
@@ -175,10 +171,8 @@ export default class App extends Vue {
         width: 2rem;
     }
 
-    .main {
-        transform: translateY(0vh);
-    }
     .switch-leave-active {
+        position: absolute;
         transition: transform .7s ease-out, opacity .7s ease-out;
     }
     .switch-enter-active {
@@ -192,37 +186,29 @@ export default class App extends Vue {
         opacity: .5;
     }
 
+    .intro {
+        width: 90rem;
+        text-align: center;
+
+        h1 { font-size: 5rem; }
+        p { font-size: 3.25rem; }
+        button { margin-top: 4rem; }
+    }
+
     .title {
+        margin-bottom: 4rem;
         font-size: 3rem;
         text-align: center;
-        width: $contentWidth;
-        position: absolute;
-        top: calc(50% - #{$contentHeight} / 2 - 10.25rem);
-        left: calc(50% - #{$contentWidth} / 2);
-    }
-
-    .content {
-        width: $contentWidth;
-        height: $contentHeight;
-        position: absolute;
-
-        @media screen {
-            top: calc(50% - #{$contentHeight} / 2);
-            left: calc(50% - #{$contentWidth} / 2);
-        }
-    }
-
-    .cta {
-        position: absolute;
-        top: calc(50% + 24.65rem);
-        left: calc(50% - 15.5rem);
     }
 
     #card {
+        width: 86rem;
+        height: 43.375rem;
         background-size: cover;
         border-radius: 1rem;
         overflow: hidden;
         box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.11);
+        position: relative;
 
         .background {
             position: absolute;
@@ -307,6 +293,10 @@ export default class App extends Vue {
         }
     }
 
+    .cta {
+        margin-top: 5rem;
+    }
+
     @media print {
         footer, header.logo, .title, .notification, #text:placeholder-shown, .cta {
             display: none;
@@ -314,12 +304,6 @@ export default class App extends Vue {
 
         body {
             background: none;
-        }
-
-        article {
-            position: absolute;
-            left: 0;
-            top: 0;
         }
 
         #text {
@@ -374,13 +358,5 @@ export default class App extends Vue {
             text-align: center;
             line-height: 1.5;
         }
-    }
-
-    .intro {
-        text-align: center;
-
-        h1 { font-size: 5rem; }
-        p { font-size: 3.25rem; }
-        button { margin-top: 4rem; }
     }
 </style>
