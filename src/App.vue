@@ -14,6 +14,9 @@
                     <p>
                         Treat your friends and family to the wonderful gift of NIM this holiday.
                     </p>
+                    <p>
+                        <ThemeSelector @theme-selected="changeTheme" />
+                    </p>
                     <button class="nq-button light-blue" v-on:click="create">Create a gift card</button>
                 </section>
             </article>
@@ -59,8 +62,9 @@ import '@nimiq/vue-components/dist/NimiqVueComponents.css';
 import { Component, Vue } from 'vue-property-decorator';
 import { Amount, QrCode } from '@nimiq/vue-components';
 import HubApi, { Cashlink } from '@nimiq/hub-api';
+import ThemeSelector, { Theme } from './ThemeSelector.vue';
 
-@Component({ components: { Amount, QrCode } })
+@Component({ components: { Amount, QrCode, ThemeSelector } })
 export default class App extends Vue {
     intro = true;
     funded = false;
@@ -113,6 +117,10 @@ export default class App extends Vue {
                 alert(e);
             }
         }
+    }
+
+    changeTheme(theme: Theme) {
+        console.log(JSON.stringify(theme));
     }
 
     print() {
