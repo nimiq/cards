@@ -34,7 +34,7 @@ export default class ThemeSelector extends Vue {
             default: true,
         },
         {
-            label: 'Holiday Greetings Gift Card',
+            label: 'Holiday Gift Card',
             id: 'christmas',
             cashlinkTheme: HubApi.CashlinkTheme.CHRISTMAS,
         },
@@ -52,7 +52,7 @@ export default class ThemeSelector extends Vue {
     currentTheme() {
         const index = this.$refs.select
             ? (this.$refs.select as HTMLSelectElement).selectedIndex
-            : this.themes.findIndex(theme => theme.default)
+            : this.themes.findIndex(theme => theme.default);
         return this.themes[index];
     }
 }

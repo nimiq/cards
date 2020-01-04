@@ -11,9 +11,9 @@
         <transition name="switch">
             <article v-if="intro" class="intro" key="intro">
                 <section>
-                    <h1>Nimiq Holiday Gift Cards</h1>
+                    <h1>Nimiq {{ theme.label }}s</h1>
                     <p>
-                        Treat your friends and family to the wonderful gift of NIM this holiday.
+                        Treat your friends and family with some wonderful NIM!
                     </p>
                     <p>
                         <ThemeSelector @theme-selected="changeTheme" />
@@ -24,7 +24,7 @@
             <article v-else class="main" key="main">
                 <ThemeSelector class="theme-selector" @theme-selected="changeTheme" />
 
-                <h2 class="title">Create your Holiday Gift Card</h2>
+                <h2 class="title">Create your {{ theme.label }}</h2>
 
                 <section id="card">
                     <img :src="themeImageUrl('card')" class="background">
@@ -34,7 +34,7 @@
                     </div>
 
                     <textarea id="text" v-model="message"
-                        placeholder="Write your loving Holiday message here..."></textarea>
+                        placeholder="Write your loving message here..."></textarea>
 
                     <div id="qrcode">
                         <QrCode v-show="funded" fill="#1f2248" :data="cashlink"
@@ -134,7 +134,7 @@ export default class App extends Vue {
         document.body.style.backgroundImage = `url(${this.themeImageUrl('background')})`;
     }
 
-    themeImageUrl(asset: String){
+    themeImageUrl(asset: String) {
         return `themes/${this.theme.id}-${asset}.svg`;
     }
 
