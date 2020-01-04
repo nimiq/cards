@@ -22,7 +22,7 @@
                 </section>
             </article>
             <article v-else class="main" key="main">
-                <ThemeSelector class="theme-selector" @theme-selected="changeTheme" />
+                <ThemeSelector class="theme-selector" :selected="theme.id" @theme-selected="changeTheme" />
 
                 <h2 class="title">Create your {{ theme.label }}</h2>
 

@@ -4,7 +4,7 @@
             <option
                 v-for="theme in themes"
                 :key="theme.id"
-                :selected="theme.default"
+                :selected="theme.id == selected"
                 :value="theme.id"
                 >
                 {{ theme.label }}
@@ -14,14 +14,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import HubApi from '@nimiq/hub-api';
 
 export interface Theme {
     label: string;
     id: string;
     cashlinkTheme: number;
-    default?: boolean;
 }
 
 @Component({ components: { } })
@@ -31,7 +30,6 @@ export default class ThemeSelector extends Vue {
             label: 'Chinese New Year Gift Card',
             id: 'cny',
             cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
-            default: true,
         },
         {
             label: 'Holiday Gift Card',
@@ -45,14 +43,21 @@ export default class ThemeSelector extends Vue {
         },
     ];
 
+    @Prop(String) selected?: string;
+    private default: string = 'cny';
+
     created() {
+        this.default = this.selected || this.default;
+    }
+
+    mounted() {
         this.$emit('theme-selected', this.currentTheme());
     }
 
     currentTheme() {
         const index = this.$refs.select
             ? (this.$refs.select as HTMLSelectElement).selectedIndex
-            : this.themes.findIndex(theme => theme.default);
+            : this.themes.findIndex(theme => theme.id === this.selected);
         return this.themes[index];
     }
 }
