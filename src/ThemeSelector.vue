@@ -24,7 +24,6 @@ export interface Theme {
     default?: boolean;
 }
 
-
 @Component({ components: { } })
 export default class ThemeSelector extends Vue {
     private themes: Theme[] = [
@@ -46,8 +45,15 @@ export default class ThemeSelector extends Vue {
         },
     ];
 
+    created() {
+        this.$emit('theme-selected', this.currentTheme());
+    }
+
     currentTheme() {
-        return this.themes[(this.$refs.select as HTMLSelectElement).selectedIndex];
+        const index = this.$refs.select
+            ? (this.$refs.select as HTMLSelectElement).selectedIndex
+            : this.themes.findIndex(theme => theme.default)
+        return this.themes[index];
     }
 }
 </script>
