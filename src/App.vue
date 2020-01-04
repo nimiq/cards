@@ -1,5 +1,6 @@
 <template>
     <main id="app">
+        <!-- TODO remove? update to themes/ folder? -->
         <link rel="prefetch" href="img/christmas-card.svg"><!-- this is the path in the deployment -->
         <transition name="notification">
             <div v-if="showNotification" class="notification">
@@ -21,9 +22,12 @@
                 </section>
             </article>
             <article v-else class="main" key="main">
+                <ThemeSelector class="theme-selector" @theme-selected="changeTheme" />
+
                 <h2 class="title">Create your Holiday Gift Card</h2>
+
                 <section id="card">
-                    <img src="../assets/christmas-card.svg" class="background">
+                    <img :src="themeImageUrl('card')" class="background">
 
                     <div class="value-container">
                         <Amount ref="amount" id="value" :amount="value" :decimals="2" v-bind:class="{ funded }"/>
@@ -74,6 +78,12 @@ export default class App extends Vue {
     cashlink = '';
     qrCodeSource = '';
     showNotification = false;
+    // not optimal: currently defining "default" here and in ThemeSelector, should be one place only
+    theme: Theme = {
+        label: 'Gift Card',
+        id: 'neutral',
+        cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+    };
 
     create() {
         this.intro = false;
@@ -120,7 +130,12 @@ export default class App extends Vue {
     }
 
     changeTheme(theme: Theme) {
-        console.log(JSON.stringify(theme));
+        this.theme = theme;
+        document.body.style.backgroundImage = `url(${this.themeImageUrl('background')})`;
+    }
+
+    themeImageUrl(asset: String){
+        return `themes/${this.theme.id}-${asset}.svg`;
     }
 
     print() {
@@ -136,7 +151,6 @@ export default class App extends Vue {
     }
 
     body {
-        background: var(--nimiq-gray) url("../assets/christmas-background.svg");
         background-position: center bottom;
         background-size: cover;
         overflow: hidden;
@@ -207,6 +221,12 @@ export default class App extends Vue {
         margin-bottom: 4rem;
         font-size: 3rem;
         text-align: center;
+    }
+
+    .theme-selector {
+        position: fixed;
+        top: 3rem;
+        right: 3rem;
     }
 
     #card {
