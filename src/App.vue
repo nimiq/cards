@@ -5,7 +5,7 @@
         <transition name="notification">
             <div v-if="showNotification" class="notification">
                 <img src="../assets/checkmark-small.svg">
-                Gift Card created.
+                Card created.
             </div>
         </transition>
         <transition name="switch">
@@ -16,13 +16,15 @@
                         Treat your friends and family with some wonderful NIM!
                     </p>
                     <p>
-                        <ThemeSelector @theme-selected="changeTheme" />
+                        <Dropdown :values="themeIdsAndLabels" color="light-blue" :default="this.theme.id"
+                            @change="changeTheme" />
                     </p>
-                    <button class="nq-button light-blue" v-on:click="create">Create a gift card</button>
+                    <button class="nq-button light-blue" v-on:click="create">Create a card</button>
                 </section>
             </article>
             <article v-else class="main" key="main">
-                <ThemeSelector class="theme-selector" :selected="theme.id" @theme-selected="changeTheme" />
+                <Dropdown :values="themeIdsAndLabels" :default="this.theme.id" @change="changeTheme"
+                    color="light-blue" class="theme-switcher" />
 
                 <h2 class="title">Create your {{ theme.label }}</h2>
 
@@ -38,7 +40,7 @@
 
                     <div id="qrcode">
                         <QrCode v-show="funded" fill="#1f2248" :data="cashlink"
-                        errorCorrection="L" :radius="0.5" :size="300" ref="qrcode" />
+                            errorCorrection="L" :radius="0.5" :size="300" ref="qrcode" />
                         <img v-show="funded" :src="qrCodeSource" alt="QR Code" ref="qrcodeimg">
                         <div class="placeholder" v-if="!funded">
                             QR code will be shown here once you funded your gift card.
@@ -48,10 +50,10 @@
                 </section>
                 <transition name="switch">
                     <button v-if="!funded" class="nq-button light-blue cta" key="fund" @click="fund">
-                        Fund gift card
+                        Fund card
                     </button>
                     <button v-else class="nq-button gold cta" key="print" @click="print">
-                        Print gift card
+                        Print card
                     </button>
                 </transition>
             </article>
@@ -66,9 +68,38 @@ import '@nimiq/vue-components/dist/NimiqVueComponents.css';
 import { Component, Vue } from 'vue-property-decorator';
 import { Amount, QrCode } from '@nimiq/vue-components';
 import HubApi, { Cashlink } from '@nimiq/hub-api';
-import ThemeSelector, { Theme } from './ThemeSelector.vue';
+import Dropdown from './Dropdown.vue';
 
-@Component({ components: { Amount, QrCode, ThemeSelector } })
+export interface Theme {
+    label: string;
+    id: string;
+    cashlinkTheme: number;
+    dark: boolean;
+    default?: boolean;
+}
+
+const themes: Theme[] = [
+    {
+        label: 'Chinese New Year Card',
+        id: 'cny',
+        cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+        dark: true,
+        default: true,
+    },
+    {
+        label: 'Holiday Card',
+        id: 'christmas',
+        dark: false,
+        cashlinkTheme: HubApi.CashlinkTheme.CHRISTMAS,
+    },
+    // {
+    //     label: 'Neutral Card',
+    //     id: 'neutral',
+    //     cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+    // },
+];
+
+@Component({ components: { Amount, QrCode, Dropdown } })
 export default class App extends Vue {
     intro = true;
     funded = false;
@@ -78,15 +109,15 @@ export default class App extends Vue {
     cashlink = '';
     qrCodeSource = '';
     showNotification = false;
-    // not optimal: currently defining "default" here and in ThemeSelector, should be one place only
-    theme: Theme = {
-        label: 'Gift Card',
-        id: 'neutral',
-        cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
-    };
+    themes = themes;
+    theme = themes.find(theme => theme.default)!;
 
     create() {
         this.intro = false;
+    }
+
+    mounted() {
+        this.changeTheme(this.theme.id);
     }
 
     async fund() {
@@ -97,7 +128,7 @@ export default class App extends Vue {
 
         try {
             const cashlink: Cashlink = await hubApi.createCashlink({
-                appName: 'Holiday Gift Card',
+                appName: this.theme.label,
                 message: this.message,
                 autoTruncateMessage: true,
                 returnCashlink: true,
@@ -116,22 +147,21 @@ export default class App extends Vue {
             this.funded = true;
 
             this.showNotification = true;
-            setTimeout(() => {
-                this.showNotification = false;
-            }, 3000);
+            setTimeout(() => { this.showNotification = false; }, 3000);
         } catch (e) {
             const message = e.message || e;
             if (message !== 'CANCELED' && message !== 'Connection was closed') {
-                await new Promise(resolve => setTimeout(resolve, 500)); // give the hub popup time to close
                 // eslint-disable-next-line
-                alert(e);
+                setTimeout(() => alert(e), 500); // give the hub popup time to close
             }
         }
     }
 
-    changeTheme(theme: Theme) {
-        this.theme = theme;
+    changeTheme(themeId: string) {
+        this.theme = themes.find(theme => theme.id === themeId)!;
         document.body.style.backgroundImage = `url(${this.themeImageUrl('background')})`;
+        document.body.classList.toggle('dark', this.theme.dark);
+        this.themes.forEach(theme => document.body.classList.toggle(theme.id, theme.id === themeId));
     }
 
     themeImageUrl(asset: String) {
@@ -142,10 +172,17 @@ export default class App extends Vue {
         window.print();
         this.printed = true;
     }
+
+    get themeIdsAndLabels() {
+        return Object.fromEntries(this.themes.map(theme => [theme.id, theme.label]));
+    }
 }
 </script>
 
 <style lang="scss">
+    $dark-font: #2c3e50;
+    $light-font: white;
+
     html {
         contain: layout; // avoid expensive re-layouting during transition of transform on state switch
     }
@@ -154,13 +191,20 @@ export default class App extends Vue {
         background-position: center bottom;
         background-size: cover;
         overflow: hidden;
+        color: $dark-font;
+
+        &.dark {
+            &, .logo {
+                color: $light-font;
+            }
+        }
     }
 
     #app {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-align: left;
-        color: #2c3e50;
+        // color: #2c3e50;
         margin-top: 60px;
         display: flex;
         justify-content: center;
@@ -199,6 +243,10 @@ export default class App extends Vue {
     }
     .switch-enter-active {
         transition: transform 1s ease-out, opacity 1s ease-out;
+
+        .theme-switcher {
+            display: none;
+        }
     }
     .switch-leave-to {
         opacity: 0;
@@ -223,7 +271,7 @@ export default class App extends Vue {
         text-align: center;
     }
 
-    .theme-selector {
+    .dropdown.theme-switcher {
         position: fixed;
         top: 3rem;
         right: 3rem;
@@ -306,6 +354,7 @@ export default class App extends Vue {
             .placeholder {
                 font-size: 1.25rem;
                 text-align: center;
+                color: $dark-font;
                 position: absolute;
                 top: 50%;
                 transform: translateY(-50%);
@@ -336,6 +385,8 @@ export default class App extends Vue {
 
         #text {
             resize: none;
+            // make sure color is white in Firefox when printing
+            color: white;
         }
     }
 
@@ -371,20 +422,20 @@ export default class App extends Vue {
         #app {
             display: flex;
             margin-top: 0;
-        }
 
-        #app > * {
-            display: none;
-        }
+            & > * {
+                display: none;
+            }
 
-        #app::before {
-            content: "Hey there! With this app, you can create and print holiday gift cards. "
-            + "But it's designed for desktop computers and laptops. "
-            + "So fetch your laptop, go to nimiq.com/holidays and create a gift for your friends and family.";
-            padding: 0 3rem;
-            margin: auto;
-            text-align: center;
-            line-height: 1.5;
+            &::before {
+                content: "Hey there! With this app, you can create and print Nimiq Cards. "
+                + "But it's designed for desktop computers and laptops. "
+                + "So fetch your laptop, go to nimiq.com/cards and create a card for your friends and family.";
+                padding: 0 3rem;
+                margin: auto;
+                text-align: center;
+                line-height: 1.5;
+            }
         }
     }
 </style>
