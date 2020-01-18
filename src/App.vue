@@ -76,7 +76,7 @@ export interface Theme {
     dark: boolean;
 }
 
-const themes: Theme[] = [
+const THEMES: Theme[] = [
     {
         label: 'Chinese New Year Card',
         id: 'cny',
@@ -92,9 +92,12 @@ const themes: Theme[] = [
     // {
     //     label: 'Neutral Card',
     //     id: 'neutral',
+    //     dark: false,
     //     cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
     // },
 ];
+// Note that this can be specified in .env or via command line
+const DEFAULT_THEME_ID = process.env.VUE_APP_DEFAULT_THEME;
 
 @Component({ components: { Amount, QrCode, Dropdown } })
 export default class App extends Vue {
@@ -106,8 +109,7 @@ export default class App extends Vue {
     cashlink = '';
     qrCodeSource = '';
     showNotification = false;
-    themes = themes;
-    theme = themes.find(theme => theme.id === process.env.VUE_APP_DEFAULT_THEME)!;
+    theme = THEMES.find(theme => theme.id === DEFAULT_THEME_ID)!;
 
     create() {
         this.intro = false;
@@ -155,10 +157,10 @@ export default class App extends Vue {
     }
 
     changeTheme(themeId: string) {
-        this.theme = themes.find(theme => theme.id === themeId)!;
+        this.theme = THEMES.find(theme => theme.id === themeId)!;
         document.body.style.backgroundImage = `url(${this.themeImageUrl('background')})`;
         document.body.classList.toggle('dark', this.theme.dark);
-        this.themes.forEach(theme => document.body.classList.toggle(theme.id, theme.id === themeId));
+        THEMES.forEach(theme => document.body.classList.toggle(theme.id, theme.id === themeId));
     }
 
     themeImageUrl(asset: String) {
@@ -170,8 +172,8 @@ export default class App extends Vue {
         this.printed = true;
     }
 
-    get themeIdsAndLabels() {
-        return Object.fromEntries(this.themes.map(theme => [theme.id, theme.label]));
+    get themeIdsAndLabels() { // eslint-disable-line class-methods-use-this
+        return Object.fromEntries(THEMES.map(theme => [theme.id, theme.label]));
     }
 }
 </script>
