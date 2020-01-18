@@ -1,7 +1,6 @@
 <template>
     <main id="app">
-        <!-- TODO remove? update to themes/ folder? -->
-        <link rel="prefetch" href="img/christmas-card.svg"><!-- this is the path in the deployment -->
+        <link rel="prefetch" :href="themeImageUrl('card')">
         <transition name="notification">
             <div v-if="showNotification" class="notification">
                 <img src="img/checkmark-small.svg">
@@ -75,7 +74,6 @@ export interface Theme {
     id: string;
     cashlinkTheme: number;
     dark: boolean;
-    default?: boolean;
 }
 
 const themes: Theme[] = [
@@ -84,7 +82,6 @@ const themes: Theme[] = [
         id: 'cny',
         cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
         dark: true,
-        default: true,
     },
     {
         label: 'Holiday Card',
@@ -110,7 +107,7 @@ export default class App extends Vue {
     qrCodeSource = '';
     showNotification = false;
     themes = themes;
-    theme = themes.find(theme => theme.default)!;
+    theme = themes.find(theme => theme.id === process.env.VUE_APP_DEFAULT_THEME)!;
 
     create() {
         this.intro = false;
