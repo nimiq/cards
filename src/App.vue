@@ -4,7 +4,7 @@
         <link rel="prefetch" href="img/christmas-card.svg"><!-- this is the path in the deployment -->
         <transition name="notification">
             <div v-if="showNotification" class="notification">
-                <img src="../assets/checkmark-small.svg">
+                <img src="img/checkmark-small.svg">
                 Card created.
             </div>
         </transition>
