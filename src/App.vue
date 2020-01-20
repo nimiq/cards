@@ -1,6 +1,6 @@
 <template>
     <main id="app">
-        <link rel="prefetch" :href="themeImageUrl('card')">
+        <link rel="prefetch" :href="cardUrl">
         <transition name="notification">
             <div v-if="showNotification" class="notification">
                 <img src="img/checkmark-small.svg">
@@ -28,7 +28,7 @@
                 <h2 class="title">Create your {{ theme.label }}</h2>
 
                 <section id="card">
-                    <img :src="themeImageUrl('card')" class="background">
+                    <img :src="cardUrl" class="background">
 
                     <div class="value-container">
                         <Amount ref="amount" id="value" :amount="value" :decimals="2" v-bind:class="{ funded }"/>
@@ -159,18 +159,22 @@ export default class App extends Vue {
 
     changeTheme(themeId: string) {
         this.theme = THEMES.find(theme => theme.id === themeId)!;
-        document.body.style.backgroundImage = `url(${this.themeImageUrl('background')})`;
+        document.body.style.backgroundImage = `url(${this.backgroundUrl})`;
         document.body.classList.toggle('dark', this.theme.dark);
         THEMES.forEach(theme => document.body.classList.toggle(theme.id, theme.id === themeId));
-    }
-
-    themeImageUrl(asset: String) {
-        return `themes/${this.theme.id}-${asset}.svg`;
     }
 
     print() {
         window.print();
         this.printed = true;
+    }
+
+    get backgroundUrl() {
+        return `themes/${this.theme.id}-background.svg`;
+    }
+
+    get cardUrl() {
+        return `themes/${this.theme.id}-card.svg`;
     }
 
     get themeIdsAndLabels() { // eslint-disable-line class-methods-use-this
