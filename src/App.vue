@@ -96,7 +96,8 @@ const THEMES: Theme[] = [
     //     cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
     // },
 ];
-// Note that this can be specified in .env or via command line
+
+// This can be specified in the .env file or via command line
 const DEFAULT_THEME_ID = process.env.VUE_APP_DEFAULT_THEME;
 
 @Component({ components: { Amount, QrCode, Dropdown } })
