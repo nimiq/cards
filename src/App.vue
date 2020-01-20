@@ -18,7 +18,7 @@
                         <Dropdown :values="themeIdsAndLabels" color="light-blue" :default="theme.id"
                             @change="changeTheme" />
                     </p>
-                    <button class="nq-button light-blue" v-on:click="create">Create a card</button>
+                    <button class="nq-button light-blue" @:click="create">Create a card</button>
                 </section>
             </article>
             <article v-else class="main" key="main">
@@ -66,13 +66,13 @@ import '@nimiq/vue-components/dist/NimiqVueComponents.css';
 
 import { Component, Vue } from 'vue-property-decorator';
 import { Amount, QrCode } from '@nimiq/vue-components';
-import HubApi, { Cashlink } from '@nimiq/hub-api';
+import HubApi, { Cashlink, CashlinkTheme } from '@nimiq/hub-api';
 import Dropdown from './Dropdown.vue';
 
 export interface Theme {
     label: string;
     id: string;
-    cashlinkTheme: number;
+    cashlinkTheme: CashlinkTheme;
     dark: boolean;
 }
 
@@ -133,7 +133,7 @@ export default class App extends Vue {
                 autoTruncateMessage: true,
                 returnCashlink: true,
                 skipSharing: true,
-                theme: HubApi.CashlinkTheme.CHRISTMAS,
+                theme: this.theme.cashlinkTheme,
             });
 
             this.value = cashlink.value;
@@ -184,7 +184,7 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-    $dark-font: #2c3e50;
+    $dark-font: var(--nimiq-blue);
     $light-font: white;
 
     html {
