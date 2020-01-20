@@ -15,14 +15,14 @@
                         Treat your friends and family with some wonderful NIM!
                     </p>
                     <p>
-                        <Dropdown :values="themeIdsAndLabels" color="light-blue" :default="this.theme.id"
+                        <Dropdown :values="themeIdsAndLabels" color="light-blue" :default="theme.id"
                             @change="changeTheme" />
                     </p>
                     <button class="nq-button light-blue" v-on:click="create">Create a card</button>
                 </section>
             </article>
             <article v-else class="main" key="main">
-                <Dropdown :values="themeIdsAndLabels" :default="this.theme.id" @change="changeTheme"
+                <Dropdown :values="themeIdsAndLabels" :default="theme.id" @change="changeTheme"
                     color="light-blue" class="theme-switcher" />
 
                 <h2 class="title">Create your {{ theme.label }}</h2>
