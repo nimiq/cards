@@ -30,9 +30,9 @@ type Entry = {
 
 @Component({ components: {} })
 export default class Dropdown extends Vue {
-    @Prop({ type: Object, required: true }) private values!: { [value: string]: string };
-    @Prop(String) private default?: string;
-    @Prop({ type: String, default: 'green' }) private color?: string;
+    @Prop({ type: Object, required: true }) values!: { [value: string]: string };
+    @Prop(String) default?: string;
+    @Prop({ type: String, default: 'green' }) color?: string;
 
     private selected?: string = '';
     private extended: boolean = false;
