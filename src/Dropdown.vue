@@ -1,7 +1,7 @@
 <template>
     <div class="dropdown" :class="{extended}">
         <button class="nq-button-pill nq-label" :class="color" @click="extended = !extended">
-            {{ this.selectedLabel }}
+            {{ selectedLabel }}
             <svg width="7" height="6" viewBox="0 0 7 6" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M3 .7c.3-.3.7-.3 1 0l2.6 4.5c.2.4 0 .8-.5.8H1a.5.5 0 01-.5-.8L3.1.7z"/>
             </svg>
@@ -12,8 +12,7 @@
                     v-for="other in others"
                     :key="other.value"
                     class="nq-label other"
-                    @click="select(other.value); extended = false"
-                >
+                    @click="select(other.value); extended = false">
                     {{ other.label }}
                 </span>
             </div>
@@ -24,14 +23,14 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-type ValueLabel = {
+type Entry = {
     value: string,
     label: string,
 }
 
 @Component({ components: {} })
 export default class Dropdown extends Vue {
-    @Prop({ type: Object, required: true }) private values?: { [value: string]: string };
+    @Prop({ type: Object, required: true }) private values!: { [value: string]: string };
     @Prop(String) private default?: string;
     @Prop({ type: String, default: 'green' }) private color?: string;
 
@@ -39,7 +38,7 @@ export default class Dropdown extends Vue {
     private extended: boolean = false;
 
     created() {
-        this.selected = this.default || this.valueLabels[0].value;
+        this.selected = this.default || this.entries[0].value;
     }
 
     select(id: string) {
@@ -48,21 +47,18 @@ export default class Dropdown extends Vue {
     }
 
     get others() {
-        return this.valueLabels.filter(pair => pair.value !== this.selected);
+        return this.entries.filter(pair => pair.value !== this.selected);
     }
 
     get selectedLabel() {
-        return (this.valueLabels.find(pair => pair.value === this.selected) || { label: 'empty' }).label;
+        return (this.entries.find(pair => pair.value === this.selected) || { label: 'empty' }).label;
     }
 
-    get valueLabels(): ValueLabel[] {
-        if (this.values) {
-            if (Array.isArray(this.values)) {
-                return this.values.map(value => ({ value: value.replace(/\W/, ''), label: value }));
-            }
-            return Object.keys(this.values).map(value => ({ value, label: this.values![value] }));
+    get entries(): Entry[] {
+        if (Array.isArray(this.values)) {
+            return this.values.map(value => ({ value: value.replace(/\W/, ''), label: value }));
         }
-        return [];
+        return Object.keys(this.values).map(value => ({ value, label: this.values![value] }));
     }
 }
 </script>

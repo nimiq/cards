@@ -18,7 +18,7 @@
                         <Dropdown :values="themeIdsAndLabels" color="light-blue" :default="theme.id"
                             @change="changeTheme" />
                     </p>
-                    <button class="nq-button light-blue" @:click="create">Create a card</button>
+                    <button class="nq-button light-blue" @click="create">Create a card</button>
                 </section>
             </article>
             <article v-else class="main" key="main">
