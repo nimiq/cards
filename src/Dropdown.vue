@@ -32,7 +32,7 @@ type Entry = {
 export default class Dropdown extends Vue {
     @Prop({ type: Object, required: true }) values!: { [value: string]: string };
     @Prop(String) default?: string;
-    @Prop({ type: String, default: 'green' }) color?: string;
+    @Prop({ type: String, default: 'green' }) color!: string;
 
     private selected?: string = '';
     private extended: boolean = false;
@@ -58,7 +58,7 @@ export default class Dropdown extends Vue {
         if (Array.isArray(this.values)) {
             return this.values.map(value => ({ value: value.replace(/\W/, ''), label: value }));
         }
-        return Object.keys(this.values).map(value => ({ value, label: this.values![value] }));
+        return Object.keys(this.values).map(value => ({ value, label: this.values[value] }));
     }
 }
 </script>
@@ -102,7 +102,7 @@ export default class Dropdown extends Vue {
         transition: transform var(--movement-duration) var(--nimiq-ease);
     }
 
-    .extended .triangle {
+    .extended button svg {
         transform: rotate(0deg);
     }
 
