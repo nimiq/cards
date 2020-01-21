@@ -383,13 +383,18 @@ export default class App extends Vue {
         }
 
         body {
-            background: none;
+            background: none !important;
         }
 
         #text {
             resize: none;
             // make sure color is white in Firefox when printing
             color: white;
+        }
+
+        #card {
+            // making sure Chrome is not messing with the colors
+            -webkit-print-color-adjust: exact;
         }
     }
 
