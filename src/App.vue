@@ -378,7 +378,7 @@ export default class App extends Vue {
     }
 
     @media print {
-        footer, header.logo, .title, .notification, #text:placeholder-shown, .cta {
+        footer, header.logo, .dropdown, .title, .notification, #text:placeholder-shown, .cta {
             display: none;
         }
 
