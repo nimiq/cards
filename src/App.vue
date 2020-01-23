@@ -13,10 +13,12 @@
                     <h1>Nimiq {{ theme.label }}</h1>
                     <p class="intro-text">
                         Treat your friends and family with some wonderful NIM!
-                        <br>
-                        Get started by selecting a theme for your card.
+                        <template v-if="constructor.THEMES.length > 1">
+                            <br>
+                            Get started by selecting a theme for your card.
+                        </template>
                     </p>
-                    <p>
+                    <p v-if="constructor.THEMES.length > 1">
                         <Dropdown :values="themeIdsAndLabels" color="light-blue" :default="theme.id"
                             @change="changeTheme" />
                     </p>
@@ -24,7 +26,8 @@
                 </section>
             </article>
             <article v-else class="main" key="main">
-                <Dropdown v-if="!funded" :values="themeIdsAndLabels" :default="theme.id" @change="changeTheme"
+                <Dropdown v-if="constructor.THEMES.length > 1 && !funded"
+                    :values="themeIdsAndLabels" :default="theme.id" @change="changeTheme"
                     color="light-blue" class="theme-switcher" />
 
                 <h2 class="title">Create your {{ theme.label }}</h2>
@@ -78,51 +81,51 @@ export interface Theme {
     dark: boolean;
 }
 
-const THEMES: Theme[] = [
-    {
-        label: 'Lunar New Year Card',
-        id: 'lunar-new-year',
-        cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
-        dark: true,
-    },
-    {
-        label: '春节 Card (Chinese New Year)',
-        id: 'lunar-new-year-china',
-        cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
-        dark: true,
-    },
-    {
-        label: 'Tết Card (Vietnamese New Year)',
-        id: 'lunar-new-year-vietnam',
-        cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
-        dark: true,
-    },
-    {
-        label: '설날 Card (Korean New Year)',
-        id: 'lunar-new-year-korea',
-        cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
-        dark: true,
-    },
-
-    // {
-    //     label: 'Holiday Card',
-    //     id: 'christmas',
-    //     dark: false,
-    //     cashlinkTheme: HubApi.CashlinkTheme.CHRISTMAS,
-    // },
-    // {
-    //     label: 'Neutral Card',
-    //     id: 'neutral',
-    //     dark: false,
-    //     cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
-    // },
-];
-
 // This can be specified in the .env file or via command line
 const DEFAULT_THEME_ID = process.env.VUE_APP_DEFAULT_THEME;
 
 @Component({ components: { Amount, QrCode, Dropdown } })
 export default class App extends Vue {
+    private static readonly THEMES: Theme[] = [
+        {
+            label: 'Lunar New Year Card',
+            id: 'lunar-new-year',
+            cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
+            dark: true,
+        },
+        {
+            label: '春节 Card (Chinese New Year)',
+            id: 'lunar-new-year-china',
+            cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
+            dark: true,
+        },
+        {
+            label: 'Tết Card (Vietnamese New Year)',
+            id: 'lunar-new-year-vietnam',
+            cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
+            dark: true,
+        },
+        {
+            label: '설날 Card (Korean New Year)',
+            id: 'lunar-new-year-korea',
+            cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
+            dark: true,
+        },
+
+        // {
+        //     label: 'Holiday Card',
+        //     id: 'christmas',
+        //     dark: false,
+        //     cashlinkTheme: HubApi.CashlinkTheme.CHRISTMAS,
+        // },
+        // {
+        //     label: 'Neutral Card',
+        //     id: 'neutral',
+        //     dark: false,
+        //     cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+        // },
+    ];
+
     intro = true;
     funded = false;
     printed = false;
@@ -131,7 +134,7 @@ export default class App extends Vue {
     cashlink = '';
     qrCodeSource = '';
     showNotification = false;
-    theme = THEMES.find(theme => theme.id === DEFAULT_THEME_ID)!;
+    theme = App.THEMES.find(theme => theme.id === DEFAULT_THEME_ID)!;
 
     create() {
         this.intro = false;
@@ -179,10 +182,10 @@ export default class App extends Vue {
     }
 
     changeTheme(themeId: string) {
-        this.theme = THEMES.find(theme => theme.id === themeId)!;
+        this.theme = App.THEMES.find(theme => theme.id === themeId)!;
         document.body.style.backgroundImage = `url(${this.backgroundUrl})`;
         document.body.classList.toggle('dark', this.theme.dark);
-        THEMES.forEach(theme => document.body.classList.toggle(theme.id, theme.id === themeId));
+        App.THEMES.forEach(theme => document.body.classList.toggle(theme.id, theme.id === themeId));
     }
 
     print() {
@@ -200,7 +203,7 @@ export default class App extends Vue {
     }
 
     get themeIdsAndLabels() { // eslint-disable-line class-methods-use-this
-        return Object.fromEntries(THEMES.map(theme => [theme.id, theme.label]));
+        return Object.fromEntries(App.THEMES.map(theme => [theme.id, theme.label]));
     }
 }
 </script>
