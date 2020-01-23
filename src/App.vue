@@ -10,7 +10,7 @@
         <transition name="switch">
             <article v-if="intro" class="intro" key="intro">
                 <section>
-                    <h1>Nimiq {{ theme.label }}s</h1>
+                    <h1>Nimiq {{ theme.label }}</h1>
                     <p>
                         Treat your friends and family with some wonderful NIM!
                     </p>
@@ -78,17 +78,36 @@ export interface Theme {
 
 const THEMES: Theme[] = [
     {
-        label: 'Chinese New Year Card',
-        id: 'cny',
+        label: 'Lunar New Year Card',
+        id: 'lunar-new-year',
         cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
         dark: true,
     },
     {
-        label: 'Holiday Card',
-        id: 'christmas',
-        dark: false,
-        cashlinkTheme: HubApi.CashlinkTheme.CHRISTMAS,
+        label: '春节 Card (Chinese New Year)',
+        id: 'lunar-new-year-china',
+        cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
+        dark: true,
     },
+    {
+        label: 'Tết Card (Vietnamese New Year)',
+        id: 'lunar-new-year-vietnam',
+        cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
+        dark: true,
+    },
+    {
+        label: '설날 Card (Korean New Year)',
+        id: 'lunar-new-year-korea',
+        cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
+        dark: true,
+    },
+
+    // {
+    //     label: 'Holiday Card',
+    //     id: 'christmas',
+    //     dark: false,
+    //     cashlinkTheme: HubApi.CashlinkTheme.CHRISTMAS,
+    // },
     // {
     //     label: 'Neutral Card',
     //     id: 'neutral',
@@ -170,6 +189,7 @@ export default class App extends Vue {
     }
 
     get backgroundUrl() {
+        if (this.theme.id.startsWith('lunar-new-year')) return 'themes/lunar-new-year-background.svg';
         return `themes/${this.theme.id}-background.svg`;
     }
 
@@ -260,7 +280,7 @@ export default class App extends Vue {
     }
 
     .intro {
-        width: 90rem;
+        width: 95rem;
         text-align: center;
 
         h1 { font-size: 5rem; }
