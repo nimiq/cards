@@ -80,7 +80,7 @@ const THEMES: Theme[] = [
     {
         label: 'Chinese New Year Card',
         id: 'cny',
-        cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+        cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
         dark: true,
     },
     {
@@ -131,13 +131,13 @@ export default class App extends Vue {
                 appName: this.theme.label,
                 message: this.message,
                 autoTruncateMessage: true,
-                returnCashlink: true,
+                returnLink: true,
                 skipSharing: true,
                 theme: this.theme.cashlinkTheme,
             });
 
             this.value = cashlink.value;
-            this.cashlink = cashlink.cashlink!;
+            this.cashlink = cashlink.link!;
 
             if (!this.message && cashlink.message) this.message = cashlink.message as string;
 

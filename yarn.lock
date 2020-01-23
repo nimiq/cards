@@ -920,13 +920,14 @@
   resolved "https://registry.yarnpkg.com/@nimiq/core-web/-/core-web-1.5.3.tgz#f0a4de59394f210f2c2d9cda8ee35c716847d40e"
   integrity sha512-W66SS9n3ygYgD52r1GJr1WtYYOkcZsqdtMmDCEwDvkrmeARnHs2sAvj77Wt4PQG8JA7GwK5svIJr6rGccCaekw==
 
-"@nimiq/hub-api@^1.2.0-beta.6":
-  version "1.2.0-beta.6"
-  resolved "https://registry.yarnpkg.com/@nimiq/hub-api/-/hub-api-1.2.0-beta.6.tgz#74375aad9a10bfdd078867acb1cb9a839d0f2fdf"
-  integrity sha512-LJHDap0IWKrben6xo1lt5eatytnKovaf8w8c7UNKFvBRGW5Qc9aTjcwuwuTyDTZPmZ0CS/43oe+cRQDDaLpT7A==
+"@nimiq/hub-api@^1.2.0-beta.8":
+  version "1.2.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@nimiq/hub-api/-/hub-api-1.2.0-beta.8.tgz#9612e95bfa6dfa97916e74941625301204863fae"
+  integrity sha512-5HWweoGptyXPy1SlPRlr8wHHFDPy9TvrTqyO1gc1r1A8B2AQnhmqjhLntQLTgRagrUqpAmKBVKpBzDeyxUNofg==
   dependencies:
     "@nimiq/core-web" "^1.5.3"
     "@nimiq/rpc" "^0.4.0"
+    big-integer "^1.6.48"
 
 "@nimiq/rpc@^0.4.0":
   version "0.4.0"
@@ -2134,7 +2135,7 @@ bfj@^6.1.1:
     hoopy "^0.1.4"
     tryer "^1.0.1"
 
-big-integer@^1.6.44:
+big-integer@^1.6.44, big-integer@^1.6.48:
   version "1.6.48"
   resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.48.tgz#8fd88bd1632cba4a1c8c3e3d7159f08bb95b4b9e"
   integrity sha512-j51egjPa7/i+RdiRuJbPdJ2FIUYYPhvYLjzoYbcMMm62ooO6F94fETG4MTs46zPAF9Brs04OajboA/qTGuz78w==
