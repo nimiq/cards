@@ -22,7 +22,7 @@
                 </section>
             </article>
             <article v-else class="main" key="main">
-                <Dropdown :values="themeIdsAndLabels" :default="theme.id" @change="changeTheme"
+                <Dropdown v-if="!funded" :values="themeIdsAndLabels" :default="theme.id" @change="changeTheme"
                     color="light-blue" class="theme-switcher" />
 
                 <h2 class="title">Create your {{ theme.label }}</h2>
@@ -31,7 +31,7 @@
                     <img :src="cardUrl" class="background">
 
                     <div class="value-container">
-                        <Amount ref="amount" id="value" :amount="value" :decimals="2" v-bind:class="{ funded }"/>
+                        <Amount ref="amount" id="value" :amount="value" :decimals="2" :class="{ funded }"/>
                     </div>
 
                     <textarea id="text" v-model="message"
@@ -399,7 +399,7 @@ export default class App extends Vue {
 
     @media print {
         footer, header.logo, .dropdown, .title, .notification, #text:placeholder-shown, .cta {
-            display: none;
+            display: none !important;
         }
 
         body {
