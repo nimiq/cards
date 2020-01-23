@@ -11,8 +11,10 @@
             <article v-if="intro" class="intro" key="intro">
                 <section>
                     <h1>Nimiq {{ theme.label }}</h1>
-                    <p>
+                    <p class="intro-text">
                         Treat your friends and family with some wonderful NIM!
+                        <br>
+                        Get started by selecting a theme for your card.
                     </p>
                     <p>
                         <Dropdown :values="themeIdsAndLabels" color="light-blue" :default="theme.id"
@@ -286,6 +288,10 @@ export default class App extends Vue {
         h1 { font-size: 5rem; }
         p { font-size: 3.25rem; }
         button { margin-top: 4rem; }
+    }
+
+    .intro .intro-text {
+        line-height: 1.5;
     }
 
     .title {
