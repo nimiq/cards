@@ -10,7 +10,7 @@
         <transition name="switch">
             <article v-if="intro" class="intro" key="intro">
                 <section>
-                    <h1>Nimiq {{ theme.label }}</h1>
+                    <h1>Nimiq {{ theme.id === 'generic' ? 'Gift Card' : theme.label }}</h1>
                     <p class="intro-text">
                         Treat your friends and family with some wonderful NIM!
                         <template v-if="constructor.THEMES.length > 1">
@@ -88,41 +88,46 @@ const DEFAULT_THEME_ID = process.env.VUE_APP_DEFAULT_THEME;
 export default class App extends Vue {
     private static readonly THEMES: Theme[] = [
         {
+            label: 'Generic Gift Card',
+            id: 'generic',
+            dark: false,
+            cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+        },
+        {
+            label: 'Birthday Card',
+            id: 'birthday',
+            dark: false,
+            cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+        },
+        {
+            label: 'Holiday Card',
+            id: 'christmas',
+            dark: false,
+            cashlinkTheme: HubApi.CashlinkTheme.CHRISTMAS,
+        },
+        {
             label: 'Lunar New Year Card',
             id: 'lunar-new-year',
             cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
             dark: true,
         },
-        {
-            label: '春节 Card (Chinese New Year)',
-            id: 'lunar-new-year-china',
-            cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
-            dark: true,
-        },
-        {
-            label: 'Tết Card (Vietnamese New Year)',
-            id: 'lunar-new-year-vietnam',
-            cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
-            dark: true,
-        },
-        {
-            label: '설날 Card (Korean New Year)',
-            id: 'lunar-new-year-korea',
-            cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
-            dark: true,
-        },
-
         // {
-        //     label: 'Holiday Card',
-        //     id: 'christmas',
-        //     dark: false,
-        //     cashlinkTheme: HubApi.CashlinkTheme.CHRISTMAS,
+        //     label: '春节 Card (Chinese New Year)',
+        //     id: 'lunar-new-year-china',
+        //     cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
+        //     dark: true,
         // },
         // {
-        //     label: 'Neutral Card',
-        //     id: 'neutral',
-        //     dark: false,
-        //     cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+        //     label: 'Tết Card (Vietnamese New Year)',
+        //     id: 'lunar-new-year-vietnam',
+        //     cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
+        //     dark: true,
+        // },
+        // {
+        //     label: '설날 Card (Korean New Year)',
+        //     id: 'lunar-new-year-korea',
+        //     cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
+        //     dark: true,
         // },
     ];
 
