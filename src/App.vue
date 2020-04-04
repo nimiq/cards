@@ -91,13 +91,13 @@ export default class App extends Vue {
             label: 'Generic Gift Card',
             id: 'generic',
             dark: false,
-            cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+            cashlinkTheme: HubApi.CashlinkTheme.GENERIC,
         },
         {
             label: 'Birthday Card',
             id: 'birthday',
             dark: false,
-            cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+            cashlinkTheme: HubApi.CashlinkTheme.BIRTHDAY,
         },
         {
             label: 'Holiday Card',
