@@ -72,7 +72,10 @@ import '@nimiq/vue-components/dist/NimiqVueComponents.css';
 import { Component, Vue } from 'vue-property-decorator';
 import { Amount, QrCode } from '@nimiq/vue-components';
 import HubApi, { Cashlink, CashlinkTheme } from '@nimiq/hub-api';
+import { BrowserDetection } from '@nimiq/utils';
 import Dropdown from './Dropdown.vue';
+
+document.body.classList.add(BrowserDetection.detectBrowser());
 
 export interface Theme {
     label: string;
@@ -462,20 +465,36 @@ export default class App extends Vue {
 
         body {
             background: none !important;
-        }
 
-        #card {
-            // making sure Chrome is not messing with the colors
-            -webkit-print-color-adjust: exact;
+            #card {
+                // making sure Chrome is not messing with the colors
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+                box-shadow: none;
 
-            #text {
-                resize: none;
-                // make sure color is correct in Firefox when printing
-                color: $dark-font;
+                #text {
+                    resize: none;
+                }
             }
 
-            &.dark-card #text {
-                color: $light-font;
+            &.firefox {
+                #card {
+                    // avoid that Firefox cuts the card off
+                    max-width: calc(100vw - 18rem);
+
+                    #qrcode {
+                        top: 7rem;
+                        right: 5.5rem;
+                        width: 18.75rem;
+                        height: 18.75rem;
+                    }
+
+                    &.dark-card #text {
+                        // fix Firefox color printing on dark background (see https://stackoverflow.com/a/34379688)
+                        color: transparent !important;
+                        text-shadow: 0 0 $light-font;
+                    }
+                }
             }
         }
     }
