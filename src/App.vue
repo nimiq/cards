@@ -86,7 +86,9 @@ export interface Theme {
 }
 
 // This can be specified in the .env file or via command line
-const DEFAULT_THEME_ID = process.env.VUE_APP_DEFAULT_THEME;
+// const DEFAULT_THEME_ID = process.env.VUE_APP_DEFAULT_THEME;
+// randomly choose from easter1 and easter2 themes
+const DEFAULT_THEME_ID = ['easter1', 'easter2'][Math.floor(Math.random() * 2)];
 
 @Component({ components: { Amount, QrCode, Dropdown } })
 export default class App extends Vue {
