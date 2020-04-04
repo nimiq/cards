@@ -32,7 +32,7 @@
 
                 <h2 class="title">Create your {{ theme.label }}</h2>
 
-                <section id="card">
+                <section id="card" :class="{'dark-card': theme.darkCard}">
                     <img :src="cardUrl" class="background">
 
                     <div class="value-container">
@@ -78,7 +78,8 @@ export interface Theme {
     label: string;
     id: string;
     cashlinkTheme: CashlinkTheme;
-    dark: boolean;
+    darkBackground: boolean;
+    darkCard: boolean;
 }
 
 // This can be specified in the .env file or via command line
@@ -87,47 +88,68 @@ const DEFAULT_THEME_ID = process.env.VUE_APP_DEFAULT_THEME;
 @Component({ components: { Amount, QrCode, Dropdown } })
 export default class App extends Vue {
     private static readonly THEMES: Theme[] = [
+        // {
+        //     label: 'Generic Gift Card',
+        //     id: 'generic',
+        //     cashlinkTheme: HubApi.CashlinkTheme.GENERIC,
+        //     darkBackground: false,
+        //     darkCard: true,
+        // },
+        // {
+        //     label: 'Birthday Card',
+        //     id: 'birthday',
+        //     cashlinkTheme: HubApi.CashlinkTheme.BIRTHDAY,
+        //     darkBackground: false,
+        //     darkCard: true,
+        // },
         {
-            label: 'Generic Gift Card',
-            id: 'generic',
-            dark: false,
-            cashlinkTheme: HubApi.CashlinkTheme.GENERIC,
+            label: 'Easter Card by DAD',
+            id: 'easter1',
+            cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+            darkBackground: false,
+            darkCard: false,
         },
         {
-            label: 'Birthday Card',
-            id: 'birthday',
-            dark: false,
-            cashlinkTheme: HubApi.CashlinkTheme.BIRTHDAY,
+            label: 'Easter Card by Francis',
+            id: 'easter2',
+            cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+            darkBackground: false,
+            darkCard: false,
         },
         {
             label: 'Holiday Card',
             id: 'christmas',
-            dark: false,
             cashlinkTheme: HubApi.CashlinkTheme.CHRISTMAS,
+            darkBackground: false,
+            darkCard: true,
         },
         {
             label: 'Lunar New Year Card',
             id: 'lunar-new-year',
             cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
-            dark: true,
+            darkBackground: true,
+            darkCard: true,
         },
         // {
         //     label: '春节 Card (Chinese New Year)',
         //     id: 'lunar-new-year-china',
         //     cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
-        //     dark: true,
+        //     darkBackground: true,
+        //     darkCard: true,
         // },
         // {
         //     label: 'Tết Card (Vietnamese New Year)',
         //     id: 'lunar-new-year-vietnam',
         //     cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
-        //     dark: true,
+        //     darkBackground: true,
+        //     darkCard: true,
         // },
         // {
         //     label: '설날 Card (Korean New Year)',
         //     id: 'lunar-new-year-korea',
         //     cashlinkTheme: HubApi.CashlinkTheme.LUNAR_NEW_YEAR,
-        //     dark: true,
+        //     darkBackground: true,
+        //     darkCard: true,
         // },
     ];
 
@@ -189,7 +211,7 @@ export default class App extends Vue {
     changeTheme(themeId: string) {
         this.theme = App.THEMES.find(theme => theme.id === themeId)!;
         document.body.style.backgroundImage = `url(${this.backgroundUrl})`;
-        document.body.classList.toggle('dark', this.theme.dark);
+        document.body.classList.toggle('dark-background', this.theme.darkBackground);
         App.THEMES.forEach(theme => document.body.classList.toggle(theme.id, theme.id === themeId));
     }
 
@@ -200,6 +222,7 @@ export default class App extends Vue {
 
     get backgroundUrl() {
         if (this.theme.id.startsWith('lunar-new-year')) return 'themes/lunar-new-year-background.svg';
+        if (this.theme.id.startsWith('easter')) return 'themes/easter-background.svg';
         return `themes/${this.theme.id}-background.svg`;
     }
 
@@ -227,10 +250,15 @@ export default class App extends Vue {
         overflow: hidden;
         color: $dark-font;
 
-        &.dark {
+        &.dark-background {
             &, .logo {
                 color: $light-font;
             }
+        }
+
+        &.easter1,
+        &.easter2 {
+            background-position: center;
         }
     }
 
@@ -347,10 +375,10 @@ export default class App extends Vue {
                 border: none;
                 margin-top: 1rem;
                 padding: 1rem;
-                color: rgba(255, 255, 255, 0.54);
+                color: rgba(31, 35, 72, 0.6); // based on nimiq-blue
 
                 &.funded {
-                    color: var(--nimiq-gold);
+                    color: $dark-font;
                 }
 
                 .currency {
@@ -362,6 +390,7 @@ export default class App extends Vue {
         #text {
             position: absolute;
             width: 43rem;
+            height: 19rem;
             top: 16.5rem;
             bottom: 7rem;
             left: 2rem;
@@ -369,14 +398,29 @@ export default class App extends Vue {
             background: none;
             border: none;
             font-size: 2.25rem;
-            color: white;
+            color: $dark-font;
             font-family: Muli,system-ui,sans-serif;
             &::placeholder {
-                color:rgba(255, 255, 255, 0.54);
-                // color: red;
+                color: rgba(31, 35, 72, 0.6); // based on nimiq-blue
             }
             &:focus {
                 outline: none;
+            }
+        }
+
+        &.dark-card {
+            .value-container #value {
+                color: rgba(255, 255, 255, 0.54);
+                &.funded {
+                    color: var(--nimiq-gold);
+                }
+            }
+
+            #text {
+                color: $light-font;
+                &::placeholder {
+                    color:rgba(255, 255, 255, 0.54);
+                }
             }
         }
 
@@ -420,15 +464,19 @@ export default class App extends Vue {
             background: none !important;
         }
 
-        #text {
-            resize: none;
-            // make sure color is white in Firefox when printing
-            color: white;
-        }
-
         #card {
             // making sure Chrome is not messing with the colors
             -webkit-print-color-adjust: exact;
+
+            #text {
+                resize: none;
+                // make sure color is correct in Firefox when printing
+                color: $dark-font;
+            }
+
+            &.dark-card #text {
+                color: $light-font;
+            }
         }
     }
 
