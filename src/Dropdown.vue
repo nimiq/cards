@@ -1,7 +1,15 @@
 <template>
     <div class="dropdown" :class="{extended}">
-        <button class="nq-button-pill nq-label" :class="color" @click="extended = !extended">
-            {{ selectedLabel }}
+        <button class="nq-button-pill" :class="color" @click="extended = !extended">
+            <span class="nq-label">{{ selectedEntry ? selectedEntry.label : 'empty' }}</span>
+            <Tooltip v-if="selectedEntry.tooltip" preferredPosition="top right" :container="tooltipContainer">
+                <template v-slot:trigger>
+                    <InfoCircleSmallIcon />
+                </template>
+                <template v-slot:default>
+                    <div v-html="selectedEntry.tooltip"></div>
+                </template>
+            </Tooltip>
             <svg width="7" height="6" viewBox="0 0 7 6" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M3 .7c.3-.3.7-.3 1 0l2.6 4.5c.2.4 0 .8-.5.8H1a.5.5 0 01-.5-.8L3.1.7z"/>
             </svg>
@@ -11,9 +19,17 @@
                 <span
                     v-for="other in others"
                     :key="other.value"
-                    class="nq-label other"
+                    class="other"
                     @click="select(other.value); extended = false">
-                    {{ other.label }}
+                    <span class="nq-label">{{ other.label }}</span>
+                    <Tooltip v-if="other.tooltip" preferredPosition="bottom right" :container="tooltipContainer">
+                        <template v-slot:trigger>
+                            <InfoCircleSmallIcon />
+                        </template>
+                        <template v-slot:default>
+                            <div v-html="other.tooltip"></div>
+                        </template>
+                    </Tooltip>
                 </span>
             </div>
         </transition>
@@ -22,17 +38,23 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Tooltip, InfoCircleSmallIcon } from '@nimiq/vue-components';
 
 type Entry = {
     value: string,
     label: string,
+    tooltip?: string, // Warning: this gets displayed via v-html. Do not pass untrusted content.
 }
 
-@Component({ components: {} })
+@Component({ components: { Tooltip, InfoCircleSmallIcon } })
 export default class Dropdown extends Vue {
-    @Prop({ type: Object, required: true }) values!: { [value: string]: string };
+    @Prop({ type: Array, required: true }) entries!: Entry[];
     @Prop(String) default?: string;
     @Prop({ type: String, default: 'green' }) color!: string;
+    @Prop({
+        type: Object,
+        default: () => ({ $el: document.body }),
+    }) tooltipContainer!: Vue | { $el: HTMLElement };
 
     private selected?: string = '';
     private extended: boolean = false;
@@ -50,21 +72,13 @@ export default class Dropdown extends Vue {
         return this.entries.filter(pair => pair.value !== this.selected);
     }
 
-    get selectedLabel() {
-        return (this.entries.find(pair => pair.value === this.selected) || { label: 'empty' }).label;
-    }
-
-    get entries(): Entry[] {
-        if (Array.isArray(this.values)) {
-            return this.values.map(value => ({ value: value.replace(/\W/, ''), label: value }));
-        }
-        return Object.keys(this.values).map(value => ({ value, label: this.values[value] }));
+    get selectedEntry() {
+        return this.entries.find(pair => pair.value === this.selected);
     }
 }
 </script>
 
 <style scoped lang="scss">
-
     .dropdown {
         --movement-duration: .4s;
         position: relative;
@@ -77,6 +91,7 @@ export default class Dropdown extends Vue {
 
     .nq-button-pill {
         display: block;
+        width: 100%;
         height: unset;
         margin: 0;
         z-index: 1;
@@ -91,7 +106,7 @@ export default class Dropdown extends Vue {
         border-radius: 0.75rem;
     }
 
-    button svg {
+    button > svg {
         display: inline-block;
         margin-left: 1rem;
         margin-right: -0.25rem;
@@ -102,8 +117,28 @@ export default class Dropdown extends Vue {
         transition: transform var(--movement-duration) var(--nimiq-ease);
     }
 
-    .extended button svg {
+    .extended button > svg {
         transform: rotate(0deg);
+    }
+
+    .nq-label {
+        color: inherit;
+        text-transform: unset;
+    }
+
+    .tooltip {
+        margin: 0 .75rem -.25rem;
+    }
+
+    ::v-deep {
+        .tooltip .trigger {
+            color: inherit;
+        }
+
+        .tooltip .tooltip-box {
+            pointer-events: none;
+            width: 35rem;
+        }
     }
 
     .background {
@@ -138,15 +173,18 @@ export default class Dropdown extends Vue {
         margin-top: 0.5rem;
         transition:
             transform var(--movement-duration) var(--nimiq-ease),
-            opacity var(--movement-duration) var(--nimiq-ease);
+            color var(--movement-duration) var(--nimiq-ease);
 
-        opacity: 0.6;
         padding: 0.75rem 2rem;
         cursor: pointer;
+        color: rgba(31, 35, 72, .4); // based on nimiq-blue
 
         &:hover {
-            opacity: 0.8;
+            color: rgba(31, 35, 72, .6); // based on nimiq-blue
+        }
+
+        .tooltip {
+            margin-right: 0;
         }
     }
-
 </style>

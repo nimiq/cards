@@ -10,7 +10,7 @@
         <transition name="switch">
             <article v-if="intro" class="intro" key="intro">
                 <section>
-                    <h1>Nimiq {{ theme.id === 'generic' ? 'Gift Card' : theme.label }}</h1>
+                    <h1>{{ pageTitle }}</h1>
                     <p class="intro-text">
                         Treat your friends and family with some wonderful NIM!
                         <template v-if="constructor.THEMES.length > 1">
@@ -19,7 +19,7 @@
                         </template>
                     </p>
                     <p v-if="constructor.THEMES.length > 1">
-                        <Dropdown :values="themeIdsAndLabels" color="light-blue" :default="theme.id"
+                        <Dropdown :entries="dropdownEntries" color="light-blue" :default="theme.id"
                             @change="changeTheme" />
                     </p>
                     <button class="nq-button light-blue" @click="create">Create a card</button>
@@ -27,10 +27,20 @@
             </article>
             <article v-else class="main" key="main">
                 <Dropdown v-if="constructor.THEMES.length > 1 && !funded"
-                    :values="themeIdsAndLabels" :default="theme.id" @change="changeTheme"
+                    :entries="dropdownEntries" :default="theme.id" @change="changeTheme"
                     color="light-blue" class="theme-switcher" />
 
-                <h2 class="title">Create your {{ theme.label }}</h2>
+                <h2 class="title">
+                    Create your {{ theme.label }}
+                    <Tooltip v-if="getThemeTooltip(theme)" preferredPosition="top left" :container="$parent">
+                        <template v-slot:trigger>
+                            <InfoCircleIcon />
+                        </template>
+                        <template v-slot:default>
+                            <div v-html="getThemeTooltip(theme)"></div>
+                        </template>
+                    </Tooltip>
+                </h2>
 
                 <section id="card" :class="{'dark-card': theme.darkCard}">
                     <img :src="cardUrl" class="background">
@@ -70,7 +80,7 @@ import '@nimiq/style/nimiq-style.min.css';
 import '@nimiq/vue-components/dist/NimiqVueComponents.css';
 
 import { Component, Vue } from 'vue-property-decorator';
-import { Amount, QrCode } from '@nimiq/vue-components';
+import { Amount, QrCode, Tooltip, InfoCircleIcon } from '@nimiq/vue-components';
 import HubApi, { Cashlink, CashlinkTheme } from '@nimiq/hub-api';
 import { BrowserDetection } from '@nimiq/utils';
 import Dropdown from './Dropdown.vue';
@@ -83,6 +93,7 @@ export interface Theme {
     cashlinkTheme: CashlinkTheme;
     darkBackground: boolean;
     darkCard: boolean;
+    designer?: string;
 }
 
 // This can be specified in the .env file or via command line
@@ -90,7 +101,7 @@ export interface Theme {
 // randomly choose from easter1 and easter2 themes
 const DEFAULT_THEME_ID = ['easter1', 'easter2'][Math.floor(Math.random() * 2)];
 
-@Component({ components: { Amount, QrCode, Dropdown } })
+@Component({ components: { Amount, QrCode, Tooltip, Dropdown, InfoCircleIcon } })
 export default class App extends Vue {
     private static readonly THEMES: Theme[] = [
         // {
@@ -108,18 +119,20 @@ export default class App extends Vue {
         //     darkCard: true,
         // },
         {
-            label: 'Easter Card by DAD',
+            label: 'Easter Card (designed by DAD)',
             id: 'easter1',
             cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
             darkBackground: false,
             darkCard: false,
+            designer: 'DAD',
         },
         {
-            label: 'Easter Card by Francis',
+            label: 'Easter Card (designed by Francis)',
             id: 'easter2',
             cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
             darkBackground: false,
             darkCard: false,
+            designer: 'Francis',
         },
         {
             label: 'Holiday Card',
@@ -232,11 +245,40 @@ export default class App extends Vue {
     }
 
     get cardUrl() {
-        return `themes/${this.theme.id}-card.svg`;
+        return this.getThemeCardUrl(this.theme);
     }
 
-    get themeIdsAndLabels() { // eslint-disable-line class-methods-use-this
-        return Object.fromEntries(App.THEMES.map(theme => [theme.id, theme.label]));
+    get pageTitle() {
+        if (this.theme.id === 'generic') return 'Nimiq Gift Card';
+        if (this.theme.id.startsWith('easter')) return 'Nimiq Easter Card';
+        return `Nimiq ${this.theme.label}`;
+    }
+
+    get dropdownEntries() { // eslint-disable-line class-methods-use-this
+        return App.THEMES.map(theme => ({
+            value: theme.id,
+            label: theme.label,
+            tooltip: this.getThemeTooltip(theme, true),
+        }));
+    }
+
+    getThemeCardUrl(theme: Theme) { // eslint-disable-line class-methods-use-this
+        return `themes/${theme.id}-card.svg`;
+    }
+
+    getThemeTooltip(theme: Theme, includePreview = false): string | undefined {
+        switch (theme.id) {
+            case 'easter1':
+            case 'easter2':
+                // eslint-disable-next-line prefer-template
+                return `This card was designed by community member <em>${theme.designer}</em> and was chosen as`
+                    + ' a winner of our Easter Card design competition.'
+                    + (includePreview
+                        ? `<br><img src="${this.getThemeCardUrl(theme)}" style="min-height: 16rem; margin-top: 2rem">`
+                        : '');
+            default:
+                return undefined;
+        }
     }
 }
 </script>
@@ -335,16 +377,33 @@ export default class App extends Vue {
         line-height: 1.5;
     }
 
-    .title {
-        margin-bottom: 4rem;
-        font-size: 3rem;
-        text-align: center;
+    .dropdown.extended {
+        min-width: 41rem; // make dropdown wide enough that all entries fit without line breaks
     }
 
     .dropdown.theme-switcher {
         position: fixed;
         top: 3rem;
         right: 3rem;
+    }
+
+    .title {
+        margin-bottom: 4rem;
+        font-size: 3rem;
+        text-align: center;
+
+        .tooltip {
+            margin-left: 1rem;
+            margin-bottom: -.75rem;
+
+            .trigger {
+                color: inherit;
+            }
+
+            .tooltip-box {
+                min-width: 30rem;
+            }
+        }
     }
 
     #card {

@@ -12,7 +12,7 @@
     "@nimiq/hub-api": "^1.2.1",
     "@nimiq/style": "^0.7.6",
     "@nimiq/utils": "^0.4.6",
-    "@nimiq/vue-components": "https://github.com/nimiq/vue-components.git#daniel/build/hub/cashlinks+checkout",
+    "@nimiq/vue-components": "github:nimiq/vue-components#build/master",
     "core-js": "^3.4.3",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
