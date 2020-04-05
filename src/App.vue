@@ -121,7 +121,7 @@ export default class App extends Vue {
         {
             label: 'Easter Card (designed by DAD)',
             id: 'easter1',
-            cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+            cashlinkTheme: HubApi.CashlinkTheme.EASTER,
             darkBackground: false,
             darkCard: false,
             designer: 'DAD',
@@ -129,7 +129,7 @@ export default class App extends Vue {
         {
             label: 'Easter Card (designed by Francis)',
             id: 'easter2',
-            cashlinkTheme: HubApi.CashlinkTheme.STANDARD,
+            cashlinkTheme: HubApi.CashlinkTheme.EASTER,
             darkBackground: false,
             darkCard: false,
             designer: 'Francis',
