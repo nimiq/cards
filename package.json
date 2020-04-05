@@ -10,13 +10,12 @@
   },
   "dependencies": {
     "@nimiq/hub-api": "^1.2.2",
-    "@nimiq/style": "^0.7.6",
+    "@nimiq/style": "^0.8.0",
     "@nimiq/utils": "^0.4.6",
-    "@nimiq/vue-components": "github:nimiq/vue-components#build/master",
+    "@nimiq/vue-components": "github:nimiq/vue-components#build/cards",
     "core-js": "^3.4.3",
-    "vue": "^2.6.10",
-    "vue-class-component": "^7.0.2",
-    "vue-property-decorator": "^8.3.0"
+    "vue": "^2.6.11",
+    "vue-property-decorator": "^8.4.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",

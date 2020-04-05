@@ -934,11 +934,6 @@
   resolved "https://registry.yarnpkg.com/@nimiq/rpc/-/rpc-0.4.0.tgz#d15f95c39d21c513172aa75c8f43ae555067cb50"
   integrity sha512-Zpv45kTnbhmr75xc8BK2o/K1gDBh3TcJwIuo95SWBoWmu4ntcKtHs744bfu6Lf49XGG8d+cFn2dPDDDIeoBfmw==
 
-"@nimiq/style@^0.7.6":
-  version "0.7.6"
-  resolved "https://registry.yarnpkg.com/@nimiq/style/-/style-0.7.6.tgz#b8a128d8fb6208554883158b8c2fa7f11d9e8333"
-  integrity sha512-qFeIbv/xOCxHjYGfuB5U8Pb1xnRhrvetrdjtLK6zGU7tLWCuyQCOErvAKayVUpvpKyTWsXaG+I2YP2djcNo4kQ==
-
 "@nimiq/style@^0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@nimiq/style/-/style-0.8.0.tgz#b97ec06ca7742c5fc8fa5a9951008ceb9e81d469"
@@ -951,9 +946,9 @@
   dependencies:
     big-integer "^1.6.44"
 
-"@nimiq/vue-components@github:nimiq/vue-components#build/master":
+"@nimiq/vue-components@github:nimiq/vue-components#build/cards":
   version "0.1.0"
-  resolved "https://codeload.github.com/nimiq/vue-components/tar.gz/4aafb0a1b803dc7870e982457636f25446a1b3e2"
+  resolved "https://codeload.github.com/nimiq/vue-components/tar.gz/cf9cc3bc3ca68184b7593fed9dcbf885c0e49d5f"
   dependencies:
     "@nimiq/style" "^0.8.0"
     big-integer "^1.6.44"
@@ -10296,11 +10291,6 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
-vue-class-component@^7.0.2:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.1.0.tgz#b33efcb10e17236d684f70b1e96f1946ec793e87"
-  integrity sha512-G9152NzUkz0i0xTfhk0Afc8vzdXxDR1pfN4dTwE72cskkgJtdXfrKBkMfGvDuxUh35U500g5Ve4xL8PEGdWeHg==
-
 vue-class-component@^7.1.0:
   version "7.2.3"
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.2.3.tgz#a5b1abd53513a72ad51098752e2dedd499807cca"
@@ -10350,13 +10340,6 @@ vue-loader@^15.7.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-property-decorator@^8.3.0:
-  version "8.3.0"
-  resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-8.3.0.tgz#536f027dc7d626f37c8d85a2dc02f0a6cb979440"
-  integrity sha512-77YtTbZHd5CNiPzbqv51kEgL48yvD2dUDfF28vEyw3MbQ9bBAb/tDyFzskcqjNRbWyXk1vq4oM2CK/LfhxuIBg==
-  dependencies:
-    vue-class-component "^7.1.0"
-
 vue-property-decorator@^8.4.0:
   version "8.4.1"
   resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-8.4.1.tgz#fd8045b8678e1348fed57f9149279e00e404ed38"
@@ -10373,9 +10356,9 @@ vue-style-loader@^4.1.0:
     loader-utils "^1.0.2"
 
 vue-template-compiler@^2.6.10:
-  version "2.6.10"
-  resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.6.10.tgz#323b4f3495f04faa3503337a82f5d6507799c9cc"
-  integrity sha512-jVZkw4/I/HT5ZMvRnhv78okGusqe0+qH2A0Em0Cp8aq78+NK9TII263CDVz2QXZsIT+yyV/gZc/j/vlwa+Epyg==
+  version "2.6.11"
+  resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.6.11.tgz#c04704ef8f498b153130018993e56309d4698080"
+  integrity sha512-KIq15bvQDrcCjpGjrAhx4mUlyyHfdmTaoNfeoATHLAiWB+MU3cx4lOzMwrnUh9cCxy0Lt1T11hAFY6TQgroUAA==
   dependencies:
     de-indent "^1.0.2"
     he "^1.1.0"
@@ -10384,11 +10367,6 @@ vue-template-es2015-compiler@^1.6.0, vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
-
-vue@^2.6.10:
-  version "2.6.10"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
-  integrity sha512-ImThpeNU9HbdZL3utgMCq0oiMzAkt1mcgy3/E6zWC/G6AaQoeuFdsl9nDhTDU3X1R6FK7nsIUuRACVcjI+A2GQ==
 
 vue@^2.6.11:
   version "2.6.11"
