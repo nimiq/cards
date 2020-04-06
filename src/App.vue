@@ -8,7 +8,7 @@
             </div>
         </transition>
         <transition name="switch">
-            <article v-if="intro" class="intro" key="intro">
+            <article v-if="state === constructor.State.INTRO" class="intro" key="intro">
                 <section>
                     <h1>{{ pageTitle }}</h1>
                     <p class="intro-text">
@@ -22,10 +22,15 @@
                         <Dropdown :entries="dropdownEntries" color="light-blue" :default="theme.id"
                             @change="changeTheme" />
                     </p>
-                    <button class="nq-button light-blue" @click="create">Create a card</button>
+                    <button class="nq-button light-blue" @click="state = constructor.State.MAIN">
+                        Create a Card
+                    </button>
+                    <a href="javascript:void(0)" @click="state = constructor.State.SCANNER" class="redeem-button">
+                        <ScanQrCodeIcon /> Redeem a Card
+                    </a>
                 </section>
             </article>
-            <article v-else class="main" key="main">
+            <article v-else-if="state === constructor.State.MAIN" class="main" key="main">
                 <Dropdown v-if="constructor.THEMES.length > 1 && !funded"
                     :entries="dropdownEntries" :default="theme.id" @change="changeTheme"
                     color="light-blue" class="theme-switcher" />
@@ -71,6 +76,16 @@
                     </button>
                 </transition>
             </article>
+            <article v-else-if="state === constructor.State.SCANNER" class="scanner" key="scanner">
+                <h2>Scan a Nimiq Gift Card</h2>
+                <SmallPage>
+                    <QrScanner
+                        :validate="isCashlink"
+                        @cancel="state = constructor.State.INTRO"
+                        @result="navigateTo($event)"
+                    />
+                </SmallPage>
+            </article>
         </transition>
     </main>
 </template>
@@ -80,7 +95,7 @@ import '@nimiq/style/nimiq-style.min.css';
 import '@nimiq/vue-components/dist/NimiqVueComponents.css';
 
 import { Component, Vue } from 'vue-property-decorator';
-import { Amount, QrCode, Tooltip, InfoCircleIcon } from '@nimiq/vue-components';
+import { Amount, QrCode, Tooltip, SmallPage, QrScanner, InfoCircleIcon, ScanQrCodeIcon } from '@nimiq/vue-components';
 import HubApi, { Cashlink, CashlinkTheme } from '@nimiq/hub-api';
 import { BrowserDetection } from '@nimiq/utils';
 import Dropdown from './Dropdown.vue';
@@ -101,8 +116,8 @@ export interface Theme {
 // randomly choose from easter1 and easter2 themes
 const DEFAULT_THEME_ID = ['easter1', 'easter2'][Math.floor(Math.random() * 2)];
 
-@Component({ components: { Amount, QrCode, Tooltip, Dropdown, InfoCircleIcon } })
-export default class App extends Vue {
+@Component({ components: { Amount, QrCode, Tooltip, Dropdown, SmallPage, QrScanner, InfoCircleIcon, ScanQrCodeIcon } })
+class App extends Vue {
     private static readonly THEMES: Theme[] = [
         // {
         //     label: 'Generic Gift Card',
@@ -171,7 +186,7 @@ export default class App extends Vue {
         // },
     ];
 
-    intro = true;
+    state: App.State = App.State.INTRO;
     funded = false;
     printed = false;
     value = 0;
@@ -180,10 +195,6 @@ export default class App extends Vue {
     qrCodeSource = '';
     showNotification = false;
     theme = App.THEMES.find(theme => theme.id === DEFAULT_THEME_ID)!;
-
-    create() {
-        this.intro = false;
-    }
 
     mounted() {
         this.changeTheme(this.theme.id);
@@ -280,7 +291,25 @@ export default class App extends Vue {
                 return undefined;
         }
     }
+
+    isCashlink(link: string): boolean { // eslint-disable-line class-methods-use-this
+        return /^(https?:\/\/)?(hub\.nimiq(-testnet)?\.com|localhost(:\d+)?)\/cashlink/.test(link);
+    }
+
+    navigateTo(link: string) { // eslint-disable-line class-methods-use-this
+        window.location.href = link;
+    }
 }
+
+namespace App {
+    export enum State {
+        INTRO = 'intro',
+        MAIN = 'main',
+        SCANNER = 'scanner',
+    }
+}
+
+export default App;
 </script>
 
 <style lang="scss">
@@ -371,10 +400,28 @@ export default class App extends Vue {
         h1 { font-size: 5rem; }
         p { font-size: 3.25rem; }
         button { margin-top: 4rem; }
-    }
 
-    .intro .intro-text {
-        line-height: 1.5;
+        .intro-text {
+            line-height: 1.5;
+        }
+
+        .redeem-button {
+            color: inherit;
+            text-decoration: none;
+            opacity: .8;
+            transition: opacity var(--attr-duration) var(--nimiq-ease);
+
+            &:focus,
+            &:hover {
+                opacity: 1;
+            }
+
+            .nq-icon {
+                margin-bottom: -.5rem;
+                margin-right: .25rem;
+                font-size: 2.5rem;
+            }
+        }
     }
 
     .dropdown.extended {
@@ -555,6 +602,37 @@ export default class App extends Vue {
                         color: transparent !important;
                         text-shadow: 0 0 $light-font;
                     }
+                }
+            }
+        }
+    }
+
+    .scanner {
+        margin-top: -7rem;
+
+        &.switch-leave-active {
+            margin-top: -3.5rem;
+        }
+
+        h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .small-page {
+            margin: 0;
+            max-width: unset;
+            width: calc(100vmin - 2rem);
+            height: 70vh;
+            max-height: calc(100vh - 28rem);
+
+            .qr-scanner {
+                height: 100%;
+                margin: 1rem;
+                border-radius: 1rem;
+
+                .cancel-button {
+                    background: rgba(255,255,255,.2);
                 }
             }
         }
