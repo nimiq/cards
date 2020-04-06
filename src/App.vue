@@ -208,7 +208,7 @@ class App extends Vue {
 
         try {
             const cashlink: Cashlink = await hubApi.createCashlink({
-                appName: this.theme.label,
+                appName: 'Nimiq Gift Card Creator',
                 message: this.message,
                 autoTruncateMessage: true,
                 returnLink: true,
