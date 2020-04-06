@@ -671,18 +671,38 @@ export default App;
             display: flex;
             margin-top: 0;
 
-            & > * {
+            .main *,
+            .intro > section > :not(.redeem-button) {
                 display: none;
             }
 
-            &::before {
-                content: "Hey there! With this app, you can create and print Nimiq Cards. "
-                + "But it's designed for desktop computers and laptops. "
-                + "So fetch your laptop, go to nimiq.com/cards and create a card for your friends and family.";
-                padding: 0 3rem;
+            .intro::after,
+            .main::after {
+                display: block;
+                width: calc(100vw - 6rem);
                 margin: auto;
                 text-align: center;
                 line-height: 1.5;
+            }
+
+            .intro::after {
+                content: "If you want to create a Nimiq Gift Card instead, please use your desktop computer or laptop.";
+                margin-top: 4rem;
+            }
+
+            .main::after {
+                content: "Hey there! With this app, you can create and print Nimiq Cards. "
+                    + "But it's designed for desktop computers and laptops. "
+                    + "So fetch your laptop, go to nimiq.com/cards and create a card for your friends and family.";
+            }
+
+            .scanner {
+                margin-top: 0;
+
+                h2 {
+                    margin-left: 2rem;
+                    text-align: left;
+                }
             }
         }
     }
