@@ -1,7 +1,7 @@
 <template>
     <div class="dropdown" :class="{extended}">
         <button class="nq-button-pill" :class="color" @click="extended = !extended">
-            <span class="nq-label">{{ selectedEntry ? selectedEntry.label : 'empty' }}</span>
+            {{ selectedEntry ? selectedEntry.label : 'empty' }}
             <Tooltip v-if="selectedEntry.tooltip" preferredPosition="top right" :container="tooltipContainer">
                 <template v-slot:trigger>
                     <InfoCircleSmallIcon />
@@ -21,7 +21,7 @@
                     :key="other.value"
                     class="other"
                     @click="select(other.value); extended = false">
-                    <span class="nq-label">{{ other.label }}</span>
+                    {{ other.label }}
                     <Tooltip v-if="other.tooltip" preferredPosition="bottom right" :container="tooltipContainer">
                         <template v-slot:trigger>
                             <InfoCircleSmallIcon />
@@ -83,6 +83,8 @@ export default class Dropdown extends Vue {
         --movement-duration: .4s;
         position: relative;
         display: inline-block;
+        font-size: 1.75rem;
+        font-weight: 600;
 
         &.extended {
             z-index: 1;
@@ -94,6 +96,7 @@ export default class Dropdown extends Vue {
         width: 100%;
         height: unset;
         margin: 0;
+        font-weight: inherit;
         z-index: 1;
         transition: border-radius var(--movement-duration) var(--nimiq-ease);
     }
@@ -119,11 +122,6 @@ export default class Dropdown extends Vue {
 
     .extended button > svg {
         transform: rotate(0deg);
-    }
-
-    .nq-label {
-        color: inherit;
-        text-transform: unset;
     }
 
     .tooltip {
@@ -166,7 +164,6 @@ export default class Dropdown extends Vue {
     }
 
     .other {
-        font-size: 2rem;
         display: block;
         line-height: 1.5;
         margin: 0;

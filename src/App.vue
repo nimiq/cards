@@ -424,8 +424,14 @@ export default App;
         }
     }
 
-    .dropdown.extended {
-        min-width: 41rem; // make dropdown wide enough that all entries fit without line breaks
+    .dropdown {
+        min-width: 0;
+        transition: min-width .2s .2s;
+
+        &.extended {
+            min-width: 35rem; // make dropdown wide enough that all entries fit without line breaks
+            transition: min-width 0s 0s;
+        }
     }
 
     .dropdown.theme-switcher {
