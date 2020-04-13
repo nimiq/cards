@@ -374,7 +374,7 @@ export default App;
 
     .switch-leave-active {
         position: absolute;
-        transition: transform .7s ease-out, opacity .7s ease-out;
+        transition: opacity .7s ease-out;
     }
     .switch-enter-active {
         transition: transform 1s ease-out, opacity 1s ease-out;
@@ -568,6 +568,11 @@ export default App;
 
     .cta {
         margin-top: 5rem;
+
+        &.switch-leave-active {
+            left: 50%;
+            transform: translateX(-50%);
+        }
     }
 
     @media print {
