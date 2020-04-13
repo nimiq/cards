@@ -112,27 +112,25 @@ export interface Theme {
 }
 
 // This can be specified in the .env file or via command line
-// const DEFAULT_THEME_ID = process.env.VUE_APP_DEFAULT_THEME;
-// randomly choose from easter1 and easter2 themes
-const DEFAULT_THEME_ID = ['easter1', 'easter2'][Math.floor(Math.random() * 2)];
+const DEFAULT_THEME_ID = process.env.VUE_APP_DEFAULT_THEME;
 
 @Component({ components: { Amount, QrCode, Tooltip, Dropdown, SmallPage, QrScanner, InfoCircleIcon, ScanQrCodeIcon } })
 class App extends Vue {
     private static readonly THEMES: Theme[] = [
-        // {
-        //     label: 'Generic Gift Card',
-        //     id: 'generic',
-        //     cashlinkTheme: HubApi.CashlinkTheme.GENERIC,
-        //     darkBackground: false,
-        //     darkCard: true,
-        // },
-        // {
-        //     label: 'Birthday Card',
-        //     id: 'birthday',
-        //     cashlinkTheme: HubApi.CashlinkTheme.BIRTHDAY,
-        //     darkBackground: false,
-        //     darkCard: true,
-        // },
+        {
+            label: 'Generic Gift Card',
+            id: 'generic',
+            cashlinkTheme: HubApi.CashlinkTheme.GENERIC,
+            darkBackground: false,
+            darkCard: true,
+        },
+        {
+            label: 'Birthday Card',
+            id: 'birthday',
+            cashlinkTheme: HubApi.CashlinkTheme.BIRTHDAY,
+            darkBackground: false,
+            darkCard: true,
+        },
         {
             label: 'Easter Card (designed by DAD)',
             id: 'easter1',
