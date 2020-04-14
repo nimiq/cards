@@ -51,7 +51,14 @@
                     <img :src="cardUrl" class="background">
 
                     <div class="value-container">
-                        <Amount ref="amount" id="value" :amount="value" :decimals="2" :class="{ funded }"/>
+                        <AmountInput
+                            v-if="!funded"
+                            id="value-input"
+                            v-model="value"
+                            :maxFontSize="5"
+                            placeholder="0.00"
+                            :class="{ 'has-value': !!value }"/>
+                        <Amount v-else id="value-funded" :amount="value" :minDecimals="0"/>
                     </div>
 
                     <textarea id="text" v-model="message"
@@ -95,7 +102,16 @@ import '@nimiq/style/nimiq-style.min.css';
 import '@nimiq/vue-components/dist/NimiqVueComponents.css';
 
 import { Component, Vue } from 'vue-property-decorator';
-import { Amount, QrCode, Tooltip, SmallPage, QrScanner, InfoCircleIcon, ScanQrCodeIcon } from '@nimiq/vue-components';
+import {
+    Amount,
+    AmountInput,
+    QrCode,
+    Tooltip,
+    SmallPage,
+    QrScanner,
+    InfoCircleIcon,
+    ScanQrCodeIcon,
+} from '@nimiq/vue-components';
 import HubApi, { Cashlink, CashlinkTheme } from '@nimiq/hub-api';
 import { BrowserDetection } from '@nimiq/utils';
 import Dropdown from './Dropdown.vue';
@@ -114,11 +130,21 @@ export interface Theme {
 // This can be specified in the .env file or via command line
 const DEFAULT_THEME_ID = process.env.VUE_APP_DEFAULT_THEME;
 
-@Component({ components: { Amount, QrCode, Tooltip, Dropdown, SmallPage, QrScanner, InfoCircleIcon, ScanQrCodeIcon } })
+@Component({ components: {
+    Amount,
+    AmountInput,
+    QrCode,
+    Tooltip,
+    Dropdown,
+    SmallPage,
+    QrScanner,
+    InfoCircleIcon,
+    ScanQrCodeIcon,
+} })
 class App extends Vue {
     private static readonly THEMES: Theme[] = [
         {
-            label: 'Generic Gift Card',
+            label: 'Gift Card',
             id: 'generic',
             cashlinkTheme: HubApi.CashlinkTheme.GENERIC,
             darkBackground: false,
@@ -148,7 +174,7 @@ class App extends Vue {
             designer: 'Francis',
         },
         {
-            label: 'Holiday Card',
+            label: 'Winter Holiday Card',
             id: 'christmas',
             cashlinkTheme: HubApi.CashlinkTheme.CHRISTMAS,
             darkBackground: false,
@@ -206,8 +232,9 @@ class App extends Vue {
 
         try {
             const cashlink: Cashlink = await hubApi.createCashlink({
-                appName: 'Nimiq Gift Card Creator',
+                appName: 'Nimiq Gift Card',
                 message: this.message,
+                value: this.value,
                 autoTruncateMessage: true,
                 returnLink: true,
                 skipSharing: true,
@@ -480,24 +507,49 @@ export default App;
             left: 2rem;
             width: 44.875rem;
             height: 8.5rem;
-            padding: 1rem 0 0 2rem;
+            padding: 0.75rem 0 0 1.5rem;
             // border-bottom: 1.5px solid rgba(255,255,255,.5);
 
-            #value {
+            #value-input {
+                font-size: 5rem;
+                color: rgba(31, 35, 72, 0.6); // based on nimiq-blue
+
+                justify-content: flex-start;
+                padding: 0;
+                margin: 0;
+
+                &.has-value {
+                    color: var(--nimiq-blue);
+                }
+
+                input {
+                    padding: 0rem;
+                    color: inherit !important;
+                }
+
+                input::placeholder {
+                    color: inherit;
+                }
+
+                .nim {
+                    font-weight: 600;
+                    font-size: 0.5em;
+                    color: inherit;
+                }
+            }
+
+            #value-funded {
                 font-size: 5rem;
                 width: 100%;
                 background: none;
                 border: none;
-                margin-top: 1rem;
-                padding: 1rem;
-                color: rgba(31, 35, 72, 0.6); // based on nimiq-blue
-
-                &.funded {
-                    color: $dark-font;
-                }
+                padding-left: 1rem;
+                color: $dark-font;
+                position: relative;
+                top: 0.25rem;
 
                 .currency {
-                    font-size: 52%;
+                    font-size: 0.5em;
                 }
             }
         }
@@ -524,11 +576,16 @@ export default App;
         }
 
         &.dark-card {
-            .value-container #value {
+            .value-container #value-input {
                 color: rgba(255, 255, 255, 0.54);
-                &.funded {
-                    color: var(--nimiq-gold);
+
+                &.has-value {
+                    color: var(--nimiq-white);
                 }
+            }
+
+            .value-container #value-funded {
+                color: var(--nimiq-gold);
             }
 
             #text {

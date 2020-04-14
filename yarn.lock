@@ -948,7 +948,7 @@
 
 "@nimiq/vue-components@github:nimiq/vue-components#build/cards":
   version "0.1.0"
-  resolved "https://codeload.github.com/nimiq/vue-components/tar.gz/c029eed0d3a94fcb26efa7e5256afc56cd774733"
+  resolved "https://codeload.github.com/nimiq/vue-components/tar.gz/9107feed26515caf13de9fd034f590194d7b7edf"
   dependencies:
     "@nimiq/style" "^0.8.0"
     big-integer "^1.6.44"
