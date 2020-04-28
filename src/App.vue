@@ -144,7 +144,7 @@ const DEFAULT_THEME_ID = process.env.VUE_APP_DEFAULT_THEME;
 class App extends Vue {
     private static readonly THEMES: Theme[] = [
         {
-            label: 'Gift Card',
+            label: 'Generic Gift Card',
             id: 'generic',
             cashlinkTheme: HubApi.CashlinkTheme.GENERIC,
             darkBackground: false,
@@ -503,35 +503,46 @@ export default App;
 
         .value-container {
             position: absolute;
-            top: 5rem;
-            left: 2rem;
+            top: 5.5rem;
+            left: 4.75rem;
             width: 44.875rem;
             height: 8.5rem;
-            padding: 0.75rem 0 0 1.5rem;
             // border-bottom: 1.5px solid rgba(255,255,255,.5);
 
             #value-input {
                 font-size: 5rem;
-                color: rgba(31, 35, 72, 0.6); // based on nimiq-blue
-
+                color: var(--nimiq-blue);
                 justify-content: flex-start;
-                padding: 0;
-                margin: 0;
 
-                &.has-value {
-                    color: var(--nimiq-blue);
+                &:not(.has-value) {
+                    // not using ::placeholder to also color the currency ticker
+                    color: rgba(31, 35, 72, 0.6); // based on nimiq-blue
+                    caret-color: var(--nimiq-blue);
                 }
 
                 input {
-                    padding: 0rem;
                     color: inherit !important;
+                    text-align: left;
+                    transition: unset;
+                    &:focus,
+                    &:hover {
+                        box-shadow: none;
+                        outline: none;
+                    }
                 }
 
                 input::placeholder {
                     color: inherit;
+                    opacity: 1; // for Firefox
+                }
+
+                input,
+                .width-finder {
+                    padding: 0;
                 }
 
                 .nim {
+                    margin-left: 1.75rem;
                     font-weight: 600;
                     font-size: 0.5em;
                     color: inherit;
@@ -543,12 +554,11 @@ export default App;
                 width: 100%;
                 background: none;
                 border: none;
-                padding-left: 1rem;
                 color: $dark-font;
-                position: relative;
-                top: 0.25rem;
 
                 .currency {
+                    margin-left: .375rem;
+                    font-weight: 600;
                     font-size: 0.5em;
                 }
             }
@@ -569,6 +579,7 @@ export default App;
             font-family: Muli,system-ui,sans-serif;
             &::placeholder {
                 color: rgba(31, 35, 72, 0.6); // based on nimiq-blue
+                opacity: 1; // for Firefox
             }
             &:focus {
                 outline: none;
@@ -576,16 +587,19 @@ export default App;
         }
 
         &.dark-card {
-            .value-container #value-input {
-                color: rgba(255, 255, 255, 0.54);
-
-                &.has-value {
+            .value-container {
+                #value-input {
                     color: var(--nimiq-white);
-                }
-            }
 
-            .value-container #value-funded {
-                color: var(--nimiq-gold);
+                    &:not(.has-value) {
+                        color: rgba(255, 255, 255, 0.54);
+                        caret-color: var(--nimiq-white);
+                    }
+                }
+
+                #value-funded {
+                    color: var(--nimiq-gold);
+                }
             }
 
             #text {
