@@ -1,4 +1,6 @@
-# nimiq-app-template
+# Nimiq cards.
+
+Give NIM to others on a beautifully printed gift card by going to (nimiq.com/cards)[https://nimiq.com/cards].
 
 ## Project setup
 ```
