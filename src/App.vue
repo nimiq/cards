@@ -349,7 +349,6 @@ export default App;
     body {
         background-position: center bottom;
         background-size: cover;
-        overflow: hidden;
         color: $dark-font;
 
         &.dark-background {
