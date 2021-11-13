@@ -474,6 +474,7 @@ export default App;
         .tooltip {
             margin-left: 1rem;
             margin-bottom: -.75rem;
+            display: inline-block;
 
             .trigger {
                 color: inherit;
