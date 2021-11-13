@@ -2,14 +2,14 @@
     <div class="dropdown" :class="{extended}">
         <button class="nq-button-pill" :class="color" @click="extended = !extended">
             {{ selectedEntry ? selectedEntry.label : 'empty' }}
-            <Tooltip v-if="selectedEntry.tooltip" preferredPosition="top right" :container="tooltipContainer">
-                <template v-slot:trigger>
-                    <InfoCircleSmallIcon />
+            <!-- <Tooltip v-if="selectedEntry.tooltip" preferredPosition="top right" :container="tooltipContainer">
+                <template v-slot:icon>
+                    <InfoCircleIcon />
                 </template>
                 <template v-slot:default>
                     <div v-html="selectedEntry.tooltip"></div>
                 </template>
-            </Tooltip>
+            </Tooltip> -->
             <svg width="7" height="6" viewBox="0 0 7 6" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M3 .7c.3-.3.7-.3 1 0l2.6 4.5c.2.4 0 .8-.5.8H1a.5.5 0 01-.5-.8L3.1.7z"/>
             </svg>
@@ -22,9 +22,9 @@
                     class="other"
                     @click="select(other.value); extended = false">
                     {{ other.label }}
-                    <Tooltip v-if="other.tooltip" preferredPosition="bottom right" :container="tooltipContainer">
-                        <template v-slot:trigger>
-                            <InfoCircleSmallIcon />
+                    <Tooltip v-if="other.tooltip" tooltipPosition="bottom" :container="tooltipContainer">
+                        <template v-slot:icon>
+                            <InfoCircleIcon />
                         </template>
                         <template v-slot:default>
                             <div v-html="other.tooltip"></div>
@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Tooltip, InfoCircleSmallIcon } from '@nimiq/vue-components';
+import { Tooltip, InfoCircleIcon } from '@nimiq/vue-components';
 
 type Entry = {
     value: string,
@@ -46,7 +46,7 @@ type Entry = {
     tooltip?: string, // Warning: this gets displayed via v-html. Do not pass untrusted content.
 }
 
-@Component({ components: { Tooltip, InfoCircleSmallIcon } })
+@Component({ components: { Tooltip, InfoCircleIcon } })
 export default class Dropdown extends Vue {
     @Prop({ type: Array, required: true }) entries!: Entry[];
     @Prop(String) default?: string;
