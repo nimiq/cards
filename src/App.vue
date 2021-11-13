@@ -75,7 +75,8 @@
 
                 </section>
                 <transition name="switch">
-                    <button v-if="!funded" class="nq-button light-blue cta" key="fund" @click="fund">
+                    <button v-if="!funded" class="nq-button light-blue cta" key="fund" @click="fund"
+                        :disabled="!(value > 0)">
                         Fund card
                     </button>
                     <button v-else class="nq-button gold cta" key="print" @click="print">
