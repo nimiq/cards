@@ -254,7 +254,7 @@ class App extends Vue {
 
             this.showNotification = true;
             setTimeout(() => { this.showNotification = false; }, 3000);
-        } catch (e: any) {
+        } catch (e) {
             const message = e.message || e;
             if (message !== 'CANCELED' && message !== 'Connection was closed') {
                 // eslint-disable-next-line
