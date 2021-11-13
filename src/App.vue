@@ -38,7 +38,7 @@
                 <h2 class="title">
                     Create your {{ theme.label }}
                     <Tooltip v-if="getThemeTooltip(theme)" preferredPosition="top left" :container="$parent">
-                        <template v-slot:trigger>
+                        <template v-slot:icon>
                             <InfoCircleIcon />
                         </template>
                         <template v-slot:default>
@@ -254,7 +254,7 @@ class App extends Vue {
 
             this.showNotification = true;
             setTimeout(() => { this.showNotification = false; }, 3000);
-        } catch (e) {
+        } catch (e: any) {
             const message = e.message || e;
             if (message !== 'CANCELED' && message !== 'Connection was closed') {
                 // eslint-disable-next-line
@@ -308,8 +308,8 @@ class App extends Vue {
             case 'easter1':
             case 'easter2':
                 // eslint-disable-next-line prefer-template
-                return `This card was designed by community member <em>${theme.designer}</em> and was chosen as`
-                    + ' a winner of our Easter Card design competition.'
+                return `This card was designed by community member <em>${theme.designer}</em>, `
+                    + 'a winner of our Easter Card design competition.'
                     + (includePreview
                         ? `<br><img src="${this.getThemeCardUrl(theme)}" style="min-height: 16rem; margin-top: 2rem">`
                         : '');
@@ -466,24 +466,27 @@ export default App;
         right: 3rem;
     }
 
+    #app .tooltip {
+        margin-left: 1rem;
+        margin-bottom: -.4rem;
+        display: inline-block;
+
+        > a {
+            color: inherit;
+            &:not(:hover) {
+                opacity: 0.666;
+            }
+        }
+
+        .tooltip-box {
+            min-width: 30rem;
+        }
+    }
+
     .title {
         margin-bottom: 4rem;
         font-size: 3rem;
         text-align: center;
-
-        .tooltip {
-            margin-left: 1rem;
-            margin-bottom: -.75rem;
-            display: inline-block;
-
-            .trigger {
-                color: inherit;
-            }
-
-            .tooltip-box {
-                min-width: 30rem;
-            }
-        }
     }
 
     #card {
