@@ -4,7 +4,6 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "docs": "rm -rf docs && vue-cli-service build && cp -r dist docs",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint --fix"
   },
