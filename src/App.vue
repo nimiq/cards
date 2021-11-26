@@ -308,8 +308,8 @@ class App extends Vue {
             case 'easter1':
             case 'easter2':
                 // eslint-disable-next-line prefer-template
-                return `This card was designed by community member <em>${theme.designer}</em> and was chosen as`
-                    + ' a winner of our Easter Card design competition.'
+                return `This card was designed by community member <em>${theme.designer}</em>, `
+                    + 'a winner of our Easter Card design competition.'
                     + (includePreview
                         ? `<br><img src="${this.getThemeCardUrl(theme)}" style="min-height: 16rem; margin-top: 2rem">`
                         : '');
