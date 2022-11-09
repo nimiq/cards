@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import loadIubenda from './analytics/Iubenda';
 import App from './App.vue';
 
 // Specify where the svg asset for the Nimiq identicons is located. The file gets copied to this location via
@@ -10,3 +11,5 @@ Vue.config.productionTip = false;
 new Vue({
     render: h => h(App),
 }).$mount('#app');
+
+loadIubenda(); // Only loads in production
